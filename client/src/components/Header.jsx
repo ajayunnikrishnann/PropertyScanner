@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 function Header() {
   return (
-    <header className="flex items-center justify-between h-12 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-400 shadow-md py-6 px-6">
+    <header className="flex items-center justify-between h-12 bg-gradient-to-r from-gray-300 via-gray-400 to-gray-500 shadow-md py-6 px-6">
     <div className='flex justify-between items-center max-w-6xl '>
       <Link to='/'>
     <h1 className="font-bold text-sm sm:text-xl flex items-center">
