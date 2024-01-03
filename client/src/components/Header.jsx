@@ -1,8 +1,14 @@
 import { FaSearch } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
+import Modal from '../pages/Modal'
+import { useState } from 'react'
 
 
 function Header() {
+  const [showSignUp,setShowSignUp] = useState(false)
+  
+  const handleOnClose = ()=> setShowSignUp(false)
+  
   return (
     <header className="flex items-center justify-between h-12 bg-gradient-to-r from-gray-300 via-gray-400 to-gray-500 shadow-md py-6 px-6">
     <div className='flex justify-between items-center max-w-6xl '>
@@ -33,6 +39,14 @@ function Header() {
       <Link to='/sign-in'>
       <li className=' font-bold  text-slate-950 hover:text-white'>SignIn</li>
       </Link>
+
+      <Link >
+      <li onClick={() => { setShowSignUp(true);}}  className=' font-bold  text-slate-950 hover:text-white'>SignUp</li>
+      </Link>
+
+    <Modal onClose={handleOnClose} visible={showSignUp} />
+    
+      
     </ul>
   </header>
   )
