@@ -59,10 +59,10 @@ function Header() {
     </div> */}
     <ul className='flex gap-4'>
       <Link to='/createListing'>
-      <button className='hidden sm:inline font-bold bg-cyan-700 rounded-md text-slate-950 hover:text-white '>+Post Your Property</button>
+      <button className='hidden sm:inline font-bold bg-cyan-700 rounded-lg text-amber-200 hover:text-white border border-cyan-900'>+Post Your Property</button>
       </Link>
       <Link to='/'>
-      <li className='hidden sm:inline font-bold  text-slate-950 hover:text-white '>Home</li>
+      <li className='hidden sm:inline font-bold  text-slate-950 hover:text-white  '>Home</li>
       </Link>
 
       <Link to='/about'>

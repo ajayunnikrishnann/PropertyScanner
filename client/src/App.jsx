@@ -16,7 +16,7 @@ import AdminLogin from "./pages/admin/adminlogin";
 import AdminDashBoardLayout from "./components/admin/AdminDashBoardLayout";
 import NavigationBar from "./components/admin/NavigationBar";
 import UserManagement from "./components/admin/UserManagement";
-
+import PrivateRoute from "./components/PrivateRoute";
 
 export default function App() {
   return (
@@ -32,8 +32,11 @@ export default function App() {
           <Route path="/changePassword" element={<UserChangePassword />} />
           <Route path="/profile" element={<UserProfile />} />
           <Route path="/about" element={<About />} />
+
+          <Route element={<PrivateRoute />}>
           <Route path="/createListing" element={<CreateListing />} />
-         
+          </Route>
+
 
           {/* Admin Routes */}
           <Route path="/adminLogin" element={<AdminLogin />} />
