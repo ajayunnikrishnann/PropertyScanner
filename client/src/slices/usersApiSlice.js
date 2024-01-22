@@ -27,9 +27,9 @@ export const userSlice = userApiSlice.injectEndpoints({
                 body: data,
             }),
         }),
-        googleRegister: builder.mutation({
+        googleLogin: builder.mutation({
             query:(data) =>({
-                url: `${USERS_URL}/googleRegister`,
+                url: `${USERS_URL}/googleLogin`,
                 method:'POST',
                 body: data,
             }),
@@ -74,6 +74,19 @@ export const userSlice = userApiSlice.injectEndpoints({
                 method: 'GET',
             }),
           }),
+          getUserData: builder.mutation({
+            query: () => ({
+              url: `${USERS_URL}/getUserData`,
+              method: 'GET',
+            }),
+          }),
+
+        getUserBanner: builder.query({
+          query:() => ({
+            url:`${USERS_URL}/getUserBanner`,
+            method: 'GET'
+          })
+        })
     })
 })
 
@@ -81,11 +94,13 @@ export const{
     useLoginMutation,
     useRegisterMutation,
     useVerifyregistrationMutation,
-    useGoogleRegisterMutation,
+    useGoogleLoginMutation,
     useLogoutMutation,
     useForgotPasswordMutation,
     useVerifyAndChangePasswordMutation,
     useChangePasswordMutation,
     useUpdateProfileMutation,
-    useUsergetProfileMutation
+    useUsergetProfileMutation,
+    useGetUserDataMutation,
+    useGetUserBannerQuery
 } = userSlice

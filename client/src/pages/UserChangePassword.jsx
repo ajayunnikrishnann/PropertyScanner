@@ -3,14 +3,14 @@ import { useChangePasswordMutation } from '../slices/usersApiSlice'
 import { Link,useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
-
+import LoaderComponent from '../components/loader'
 
 
 function UserChangePassword() {
     const [password,setPassword] = useState('')
     const [confirmPassword,setConfirmPassword]= useState('')
     const email = sessionStorage.getItem('forgotPasswordEmail')
-    const [ChangePassword] = useChangePasswordMutation()
+    const [ChangePassword,{isLoading}] = useChangePasswordMutation()
     const navigate = useNavigate()
 
     const submitHandler = async (e)=>{
@@ -71,9 +71,14 @@ function UserChangePassword() {
 
          <button
            onClick={submitHandler}
+           disabled={isLoading}
            className='border-2 border-cyan-800 w-full  mt-2 p-3 my-1 text-white font-bold rounded-lg  bg-gradient-to-r from-cyan-600 via-cyan-700 to-cyan-800  hover:opacity-85 disabled:opacity-70'
          >
-           Change Password
+           {isLoading ? (
+            <LoaderComponent buttonText="Changing Password..." />
+          ) : (
+          'Change Password'
+          )}
          </button>
 
        

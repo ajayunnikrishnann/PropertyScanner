@@ -1,15 +1,23 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
+import { useGetUserBannerQuery } from "../slices/usersApiSlice";
+import Header from "../components/Header";
 
-function Home() {
+const Home = () => {
+  const { data: banners, isLoading, isError } = useGetUserBannerQuery();
+
+  if (isLoading) {
+    return <div>Loading banners...</div>;
+  }
 
   return (
-    <div className='flex flex-col items-center justify-center  bg-cover bg-center bg-opacity-50 bg-gradient-to-r from-teal-200 to-lime-200' style={{height:'100vh'}}>Home
-   
-
+  
+    <div className="min-h-screen flex flex-col items-stretch">
+    <Header /> {/* Header comes first */}
+    <div className="absolute inset-0 shadow-md">
+      <img src={banners.image} alt="Banner" className="w-full h-98 object-cover  " />
+    </div>
   </div>
- 
-    )
-    
-}
+ )  
+  }
+export default Home;
 
-export default Home

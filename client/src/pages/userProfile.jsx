@@ -1,29 +1,45 @@
 
-
-
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import Heading from '../components/Heading';
-import { Button } from 'primereact/button';
-import { Image } from 'primereact/image';
-
+// import Heading from '../components/Heading';
+// import { Button } from 'primereact/button';
+// import { Image } from 'primereact/image';
+import LoaderComponent from '../components/loader';
 import { useUpdateProfileMutation, useUsergetProfileMutation } from '../slices/usersApiSlice'; 
+import Header from '../components/Header';
 
 export default function UserProfile() {
   const [userData, setUserData] = useState('');
   const { userInfo } = useSelector((state) => state.auth);
   const [visible, setVisible] = useState(false);
   const [username, setUserName] = useState('');
-
+  const [imageError, setImageError] = useState('')
   const [mobile, setMobile] = useState('');
   const [profileImage, setprofileImage] = useState(null);
-  const [updateProfile] = useUpdateProfileMutation();
+  const [updateProfile,{isLoading}] = useUpdateProfileMutation();
   const [getProfile] = useUsergetProfileMutation();
 
   const handleImage = (e) => {
     const file = e.target.files[0];
-    setFileToBase(file);
+    if (file) {
+      const isValid = validateImage(file);
+      if (isValid) {
+        setFileToBase(file);
+        setImageError('');
+      } else {
+        setImageError('Invalid image type or size');
+      }
+    }
+   
   };
+
+  const validateImage = (file) => {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    const maxSize = 4 * 1024 * 1024; // 2MB
+
+    return allowedTypes.includes(file.type) && file.size <= maxSize;
+  };
+
 
   const fetchUserProfile = async () => {
     const responseFromApiCall = await getProfile({
@@ -68,7 +84,7 @@ export default function UserProfile() {
 
       if (response && response.data) {
         fetchUserProfile();
-        alert('Successfully updated');
+        // alert('Successfully updated');
       } else {
         alert('An error occurred. Please try again.');
       }
@@ -82,89 +98,65 @@ export default function UserProfile() {
   };
 
   return (
-    <>
-    
-      <div className="p-8">
-        <Heading
-          cName="hero"
-          name="htext123"
-          imageclass="coverUser"
-          img="https://png.pngtree.com/thumb_back/fh260/back_our/20190619/ourmid/pngtree-company-profile-corporate-culture-exhibition-board-display-poster-material-image_131622.jpg"
-          title="Your Profile"
+    <div>
+     <Header />
+    <div className="flex items-center justify-center">
+    <div className="my-4 max-w-screen-md border px-4 shadow-xl sm:rounded-xl sm:px-4 sm:py-1 md:mx-auto w-full">
+      <p className="font-medium text-3xl mb-10 text-center">Profile Details</p>
+  
+      <div className="flex flex-col items-center gap-4 w-full">
+        <img
+          src={userData.profileImageName || '/userr.jpg'} 
+          alt="Profile"
+          className="h-28 w-28 rounded-full mb-4"
         />
-      </div>
-
-      <div className="container mx-auto py-5">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="md:col-span-1">
-            <div className="mb-4">
-              <Image
-                src={userData.profileImageName}
-                alt="avatar"
-                className="rounded-full w-48 h-48 mx-auto mb-4"
-              />
-              <Button
-                icon="pi pi-user-edit"
-                className="w-full"
-                onClick={() => setVisible(true)}
-              />
-            </div>
-            {/* You can replace FileUpload with a Tailwind-styled input if needed */}
-            <input
-              type="file"
-              id="profileimage"
-              accept=".jpg, .jpeg, .png, .pdf,.avif"
-              onChange={handleImage}
-              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-            />
-          </div>
-
-          <div className="md:col-span-2">
-            <form onSubmit={handleSubmit}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    User name
-                  </label>
-                  <input
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUserName(e.target.value)}
-                    className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                  />
-                </div>
-              
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Mobile
-                  </label>
-                  <input
-                    type="text"
-                    value={mobile}
-                    onChange={(e) => setMobile(e.target.value)}
-                    className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Profile Image
-                  </label>
-                  <input
-                    type="file"
-                    id="profileimage"
-                    accept=".jpg, .jpeg, .png, .pdf,.avif"
-                    onChange={handleImage}
-                    className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                  />
-                </div>
-              </div>
-              <Button type="submit" className="mt-4 w-full">
-                Update Profile
-              </Button>
-            </form>
-          </div>
+  
+        <div className="w-full flex justify-center">
+          <input
+            type="file"
+            onChange={handleImage}
+            className="max-w-full rounded-lg px-2 font-medium text-blue-600 outline-none ring-blue-600 focus:ring-1 ml-2"
+          />
+           {imageError && <p className="text-red-500 text-sm">{imageError}</p>}
         </div>
       </div>
-    </>
+  
+      <div className="flex flex-col gap-4 w-full">
+        <p className="shrink-0 w-32 font-medium">Username</p>
+        <input
+          value={username}
+          onChange={(e) => setUserName(e.target.value)}
+          placeholder="First Name"
+          className="w-full rounded-md border bg-white px-2 py-2 outline-none ring-blue-600 focus:ring-1"
+        />
+      </div>
+  
+      <div className="flex flex-col gap-4 w-full">
+        <p className="shrink-0 w-32 font-medium">Mobile</p>
+        <input
+          value={mobile}
+          onChange={(e) => setMobile(e.target.value)}
+          placeholder="your.email@domain.com"
+          className="w-full rounded-md border bg-white px-2 py-2 outline-none ring-blue-600 focus:ring-1"
+        />
+      </div>
+  
+      <div className="justify-center items-center w-full">
+        <button
+          onClick={handleSubmit}
+          disabled={isLoading}
+          className="mt-3 rounded-lg border-2 border-transparent bg-blue-600 px-4 py-2 font-medium text-white focus:outline-none focus:ring hover:bg-blue-700"
+        >
+          {isLoading ? (
+            <LoaderComponent buttonText="Updating..." />
+          ) : (
+         'Update'
+          )}
+        </button>
+      </div>
+    </div>
+  </div>
+  </div>
+
   );
 }

@@ -1,11 +1,13 @@
-import User from "../Models/user.Model.js";
+import User from "../../Models/user.Model.js";
 import asyncHandler from "express-async-handler";
 import nodeMailer from "nodemailer"
-import { generateToken } from "../utils/userGenerateToken.js";
+import generateToken from "../../utils/userGenerateToken.js";
+
 import dotenv from "dotenv"
 import otpGenerator from "generate-otp";
-import OTP from '../Models/otpModel.js'
+import OTP from '../../Models/otpModel.js'
 import cloudinary from "cloudinary"
+import Banner from "../../Models/bannerModel.js";
 
 dotenv.config();
 
@@ -132,44 +134,75 @@ export const signup = asyncHandler(async(req,res)=>{
 })
 
 
-//register user using google
-export const googleRegister = asyncHandler(async(req,res) =>{
-    const { username,email,profileImageName } = req.body;
 
-    const userExists = await User.findOne({ email });
-    if(userExists) {
-        generateToken(res, userExists._id);
 
-        res.status(201).json({
-            _id: userExists._id,
-            username: userExists.username,
-            mobile: userExists.mobile,
-            email: userExists.email,
-            profileImageName: profileImageName,
-        })
-    }else {
-        const user = await User.create({
-            username: username,
-            email: email,
-            profileImageName: profileImageName,
-        }); 
-
-        if(user)  {
-            generateToken(res, user._id);
+export const googleLogin = async(req,res)=>{
+    const username = req.body.googleName
+    const email = req.body.googleEmail
+    const user = await User.findOne({email})
+        if(user){
+            generateToken(res,user._id)
             res.status(201).json({
-                _id: user._id,
-                username: user.username,
-                email: user.email,
-                mobile: user.mobile,
-                profileImageName: user.profileImageName
-                
+                _id:user._id,
+                username:user.username,
+                email:user.email,
             })
         }else{
-            res.status(400);
-            throw new Error("Invalid user data")
+            const user = await User.create({
+                username,
+                email
+            })
+            if(user){
+                generateToken(res,user._id)
+                res.status(201).json({
+                    _id:user._id,
+                    username:user.username,
+                    email:user.email,
+                })
+            }
         }
-    }
-})
+
+}
+
+
+//register user using google
+// export const googleRegister = asyncHandler(async(req,res) =>{
+//     const { username,email,profileImageName } = req.body;
+
+//     const userExists = await User.findOne({ email });
+//     if(userExists) {
+//         generateToken(res, userExists._id);
+
+//         res.status(201).json({
+//             _id: userExists._id,
+//             username: userExists.username,
+//             mobile: userExists.mobile,
+//             email: userExists.email,
+//             profileImageName: profileImageName,
+//         })
+//     }else {
+//         const user = await User.create({
+//             username: username,
+//             email: email,
+//             profileImageName: profileImageName,
+//         }); 
+
+//         if(user)  {
+//             generateToken(res, user._id);
+//             res.status(201).json({
+//                 _id: user._id,
+//                 username: user.username,
+//                 email: user.email,
+//                 mobile: user.mobile,
+//                 profileImageName: user.profileImageName
+                
+//             })
+//         }else{
+//             res.status(400);
+//             throw new Error("Invalid user data")
+//         }
+//     }
+// })
 
 
 export const logout = asyncHandler(async (req,res)=>{
@@ -322,3 +355,15 @@ export const updateUserProfile = asyncHandler(async(req,res)=>{
         res.status(200).json({ user })
     }
 })
+
+export const getBanner = async(req,res) => {
+    // const banner = await Banner.findOne({created_at: -1}) 
+    // res.status(200).json(banner)
+    try {
+        const banner = await Banner.findOne({}).sort({ created_at: -1 }).exec();
+        res.status(200).json(banner);
+      } catch (error) {
+        console.error('Error fetching banner:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+}

@@ -4,11 +4,11 @@ import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { useForgotPasswordMutation } from '../slices/usersApiSlice'
 import { useNavigate } from 'react-router-dom'
-
+import LoaderComponent from '../components/loader'
 
 function ForgotPassword() {
     const [email, setEmail] = useState('')
-    const [verifyEmail] = useForgotPasswordMutation()
+    const [verifyEmail,{isLoading}] = useForgotPasswordMutation()
     
     const navigate = useNavigate()
 
@@ -56,9 +56,14 @@ function ForgotPassword() {
       
          <button
           onClick={submitHandler}
+          disabled={isLoading}
            className='border-2 border-cyan-800 w-full  mt-2 p-3 my-1 text-white font-bold rounded-lg  bg-gradient-to-r from-cyan-600 via-cyan-700 to-cyan-800  hover:opacity-85 disabled:opacity-70'
          >
-           Proceed
+          {isLoading ? (
+            <LoaderComponent buttonText="Proceeding..."/>
+          ) : (
+         'Proceed'
+          )}
          </button>
 
          <div className='flex flex-col items-center gap-2 mt-1 justify-center'>

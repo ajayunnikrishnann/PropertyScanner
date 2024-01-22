@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 const userSchema = new mongoose.Schema({
     username: {
         type:String,
-        required: true,
+        
         
     },
     email: {
@@ -14,11 +14,11 @@ const userSchema = new mongoose.Schema({
     },
     mobile: {
         type:String,
-        required: true,
+       
     },
     password: {
         type:String,
-        required: true,
+       
     },
     profileImageName: {
         type: String,

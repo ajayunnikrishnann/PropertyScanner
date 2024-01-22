@@ -4,15 +4,16 @@ const router = express.Router();
 import {
     signup,
     verifyRegistration,
-    googleRegister,
+    googleLogin,
     logout,
     authUser,
     forgotPassword,
     verifyAndChangePassword,
     changePassword,
     updateUserProfile,
-    getProfile
-} from '../controllers/auth.controller.js'
+    getProfile,
+    getBanner,
+} from '../../controllers/user/auth.controller.js'
 
 
 
@@ -21,13 +22,13 @@ router.post('/auth',authUser)
 
 router.post('/register',signup)
 router.post('/verifyRegistration',verifyRegistration)
-router.post('/googleRegister',googleRegister)
+router.post('/googleLogin',googleLogin)
 router.get("/logout",logout)
 router.post('/forgotPassword',forgotPassword)
 router.post('/verifyAndChangePassword',verifyAndChangePassword)
 router.post('/changePassword',changePassword)
 router.post('/updateProfile',updateUserProfile)
 router.get('/getProfile',getProfile)
-
+router.get('/getUserBanner',getBanner)
 
 export default router;
