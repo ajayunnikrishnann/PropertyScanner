@@ -17,6 +17,7 @@ import AdminDashBoardLayout from "./components/admin/AdminDashBoardLayout";
 import NavigationBar from "./components/admin/NavigationBar";
 import UserManagement from "./components/admin/UserManagement";
 import PrivateRoute from "./components/PrivateRoute";
+import UpdateListing from "./pages/UpdateListing";
 
 export default function App() {
   return (
@@ -35,6 +36,7 @@ export default function App() {
 
           <Route element={<PrivateRoute />}>
           <Route path="/createListing" element={<CreateListing />} />
+          <Route path="/updateListing/:listingId" element={<UpdateListing />} />
           </Route>
 
 

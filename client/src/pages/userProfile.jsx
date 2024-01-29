@@ -248,7 +248,9 @@ const handleListingDelete = async (listingId) => {
           </Link>
           <div className='flex flex-col items-center'>
             <button onClick={()=>handleListingDelete(listing._id)} className='text-red-700 uppercase font-medium'>Delete</button>
+            <Link to={`/updateListing/${listing._id}`}>
             <button className='text-green-700 uppercase font-medium'>Edit</button>
+            </Link>
         </div>
         </div>
         
