@@ -370,9 +370,6 @@ export const getBanner = async(req,res) => {
 }
 
 export const getUserListings = async (req, res, next) => {
-    console.log('req.user:', req.user);
-    console.log('req.user.id:',req.user.id);
-    console.log('req.params.id:',req.params.id);
     if (req.user.userId === req.params.id) {
       try {
         const listings = await Listing.find({ userRef: req.params.id });

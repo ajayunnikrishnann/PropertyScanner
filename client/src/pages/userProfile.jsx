@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import LoaderComponent from '../components/loader';
 import { useUpdateProfileMutation, useUsergetProfileMutation } from '../slices/usersApiSlice'; 
 import Header from '../components/Header';
+import { Link } from 'react-router-dom';
 
 export default function UserProfile() {
   const [userData, setUserData] = useState('');
@@ -18,7 +19,8 @@ export default function UserProfile() {
   const [profileImage, setprofileImage] = useState(null);
   const [updateProfile,{isLoading}] = useUpdateProfileMutation();
   const [getProfile] = useUsergetProfileMutation();
-
+  const [showListingsError, setShowListingsError] = useState(false)
+  const [userListings, setUserListings] = useState([])
   const isValidName = (name) => /^[a-zA-Z\s]*$/.test(name);
   const isValidMobile = (mobile) => /^[0-9]{0,10}$/.test(mobile);
 
@@ -112,6 +114,21 @@ export default function UserProfile() {
     }
   };
 
+const handleShowListings = async () => {
+  try {
+    setShowListingsError(false)
+    const res = await fetch(`/api/users/listings/${userInfo._id}`)
+    const data = await res.json();
+    if (data.success === false) {
+      setShowListingsError(true);
+      return;
+    }
+    setUserListings(data);
+  } catch (error) {
+    setShowListingsError(true)
+  }
+}
+
   return (
     <div>
      <Header />
@@ -182,7 +199,7 @@ export default function UserProfile() {
         <button
           onClick={handleSubmit}
           disabled={isLoading}
-          className="mt-3 rounded-lg border-2 border-transparent bg-blue-600 px-4 py-2 font-medium text-white focus:outline-none focus:ring hover:bg-blue-700"
+          className="mt-3 rounded-lg border-2 border-transparent bg-gradient-to-b  from-cyan-500 via-cyan-700 to-cyan-900 px-4 py-2 font-medium text-white focus:outline-none focus:ring hover:bg-cyan-700"
         >
           {isLoading ? (
             <LoaderComponent buttonText="Updating..." />
@@ -190,9 +207,40 @@ export default function UserProfile() {
          'Update'
           )}
         </button>
+
+        <button onClick={handleShowListings} className='text-white font-semibold rounded-md border-2 w-40 ml-48 bg-gradient-to-b  from-cyan-500 via-cyan-700 to-cyan-900'>Show Listings</button>
+      <p className='text-red-700 mt-5'>{showListingsError ? 'Error showing listings' : ''}</p>
+     
+      {userListings && 
+      userListings.length > 0 && 
+      <div className='flex flex-col gap-4'>
+        <h1 className='text-center mt-7 text-2xl font-semibold'>Your Listings</h1>
+       {userListings.map((listing)=> (
+        <div key= {listing._id} className='border rounded-lg p-3 flex justify-between items-center gap-4'>
+          <Link to={`/listings/${listing._id}`}>
+            <img 
+            src={listing.imageUrls[0]}
+             alt='listing cover'
+             className='h-16 w-16 object-contain '
+             />
+          </Link>
+          <Link className=' text-slate-700 font-semibold  hover:underline truncate flex-1' to={`/listings/${listing._id}`}>
+          <p>{listing.name}</p>
+          </Link>
+          <div className='flex flex-col items-center'>
+            <button className='text-red-700 uppercase font-medium'>Delete</button>
+            <button className='text-green-700 uppercase font-medium'>Edit</button>
+        </div>
+        </div>
+        
+        ))}
       </div>
+      }
+      </div>
+      
     </div>
   </div>
+  
   </div>
 
   );
