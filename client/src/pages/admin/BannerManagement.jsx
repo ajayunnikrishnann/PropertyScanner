@@ -58,7 +58,8 @@ const BannerManagement = () => {
   const handleDeleteBanner = async (id) => {
     try {
       await deleteBanner(id);
-      dispatch(setBanners());
+      const updatedBanners = banners.filter((banner) => banner._id !== id);
+      dispatch(setBanners(updatedBanners));
     } catch (error) {
       console.error('Error deleting banner:', error);
     }
@@ -100,7 +101,7 @@ const BannerManagement = () => {
                     />
        
           <button
-            className="bg-blue-500 text-white px-4 py-2 rounded"
+            className="bg-cyan-800 text-white px-4 py-2 rounded"
             onClick={handleCreateBanner}
           >
             Create

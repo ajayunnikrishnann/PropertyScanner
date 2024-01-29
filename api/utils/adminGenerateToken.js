@@ -1,4 +1,6 @@
 import jwt from "jsonwebtoken";
+import dotenv from 'dotenv'
+dotenv.config()
 
 const AdmingenarateToken = (res, adminId) => {
   const token = jwt.sign({ adminId }, process.env.JWT_CODE, {

@@ -3,8 +3,8 @@ import UsersTable from '../../components/admin/UserTable'
 
 function UserManagement() {
   return (
-    <>
- <div className="header-margin ">
+    <div>
+ <div className="header-margin">
  
 
   <div className="dashboard flex">
@@ -25,7 +25,7 @@ function UserManagement() {
     </div>
   </div>
   </div>
-</>
+</div>
 
   )
 }

@@ -25,7 +25,7 @@ const loginScreen = () => {
         }).unwrap()
   
         dispatch(setCredentials({ ...responseFromApiCall }))
-        navigate('/adminHome')
+        navigate('/adminDashboard')
       } catch (err) {
         toast.error('please check your email and password')
       }

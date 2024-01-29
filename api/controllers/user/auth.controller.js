@@ -8,7 +8,8 @@ import otpGenerator from "generate-otp";
 import OTP from '../../Models/otpModel.js'
 import cloudinary from "cloudinary"
 import Banner from "../../Models/bannerModel.js";
-
+import Listing from "../../Models/listing.models.js";
+import { errorHandler } from "../../utils/error.js";
 dotenv.config();
 
 cloudinary .config({
@@ -367,3 +368,19 @@ export const getBanner = async(req,res) => {
         res.status(500).json({ error: 'Internal Server Error' });
       }
 }
+
+export const getUserListings = async (req, res, next) => {
+    console.log('req.user:', req.user);
+    console.log('req.user.id:',req.user.id);
+    console.log('req.params.id:',req.params.id);
+    if (req.user.userId === req.params.id) {
+      try {
+        const listings = await Listing.find({ userRef: req.params.id });
+        res.status(200).json(listings);
+      } catch (error) {
+        next(error);
+      }
+    } else {
+      return next(errorHandler(401, 'You can only view your own listings!'));
+    }
+  };

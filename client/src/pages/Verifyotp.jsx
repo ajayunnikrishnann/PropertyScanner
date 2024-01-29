@@ -1,5 +1,5 @@
 import {React,useState} from 'react'
-import { useSelector } from 'react-redux'
+
 import { toast } from 'react-toastify'
 import { useVerifyAndChangePasswordMutation } from '../slices/usersApiSlice'
 import { Link,useNavigate } from 'react-router-dom'
@@ -7,6 +7,7 @@ import LoaderComponent from '../components/loader'
 
 function    Verifyotp() {
     const [otp,setOtp] = useState('')
+    const [otpError, setOtpError] = useState(false);
     const [verifyOtp,{isLoading}] = useVerifyAndChangePasswordMutation()
     const email = sessionStorage.getItem('forgotPasswordEmail')
     const navigate = useNavigate()
@@ -18,16 +19,22 @@ function    Verifyotp() {
                 toast.error(' enter otp')
             }else{
                 const responseFromApiCall = await verifyOtp({ otp, email })
-                if(responseFromApiCall) {
+                console.log("responseeeee:",responseFromApiCall);
+                if(responseFromApiCall  ) {
                     navigate('/changePassword')
+                }else {
+                  setOtpError(true);
                 }
             }
         } catch (error) {
-            if (err.data && err.data.message) {
-                toast.error(err.data.message)
+          console.log('Error:', error);
+          setOtpError(true);
+            if (error.data && error.data.message) {
+                toast.error(error.data.message)
               } else {
                 toast.error('An error occurred. Please try again.')
               }
+              
         }
     }
 
@@ -48,7 +55,12 @@ function    Verifyotp() {
           'Verify'
           )}
       </button>
-   
+      {otpError && (
+              <p className='text-red-700 text-sm font-semibold'>
+                Wrong OTP. Please enter the correct OTP.
+              </p>
+            )}
+        
    <div className="flex gap-2 mt-1 justify-center ">
      <p>An otp has sent to your email</p>
      </div>

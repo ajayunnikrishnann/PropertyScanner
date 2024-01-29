@@ -9,15 +9,66 @@ import LoaderComponent from '../components/loader'
 function UserChangePassword() {
     const [password,setPassword] = useState('')
     const [confirmPassword,setConfirmPassword]= useState('')
+    const [passwordError,setPasswordError] = useState('');
+    const [confirmPasswordError,setConfirmPasswordError] = useState('');
     const email = sessionStorage.getItem('forgotPasswordEmail')
     const [ChangePassword,{isLoading}] = useChangePasswordMutation()
     const navigate = useNavigate()
 
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    const validatePassword = () => {
+      if (!password || !confirmPassword) {
+        // If either password or confirmPassword is empty, no need to validate
+        return;
+      }
+    
+      if (!passwordRegex.test(password)) {
+        setPasswordError(
+          'Password should have 8 characters, digit, one special character, uppercase and lowercase.'
+        );
+      } else if (password !== confirmPassword) {
+        setConfirmPasswordError('Passwords do not match');
+        setPasswordError(''); // Clear password error if passwords don't match
+      } else {
+        setPasswordError('');
+        setConfirmPasswordError('');
+      }
+    };
+    
+    
+    const validateEmptyFields = () => {
+      let hasEmptyField = false;
+
+      if (!password) {
+        setPasswordError('Password is required');
+        hasEmptyField = true;
+      } else {
+        setPasswordError('');
+      }
+  
+      if (!confirmPassword) {
+        setConfirmPasswordError('Confirm Password is required');
+        hasEmptyField = true;
+      } else {
+        setConfirmPasswordError('');
+      }
+  
+      return !hasEmptyField;
+    }
+
     const submitHandler = async (e)=>{
         e.preventDefault()
+
+        if (!validateEmptyFields()) {
+          return;
+        }
+
+        validatePassword();
+
         try {
             if(password !== confirmPassword) {
-                toast.error(' password do not match')
+                console.log(' password do not match')
             }else {
                 const responseFromApiCall = await ChangePassword({
                     email,
@@ -25,7 +76,7 @@ function UserChangePassword() {
                 }).unwrap()
                 if(responseFromApiCall){
                     sessionStorage.removeItem('forgotPasswordEmail')
-                    toast.success('password changed sucessfully')
+                    // toast.success('password changed sucessfully')
                     navigate('/sign-in')
                 }
             }
@@ -55,20 +106,21 @@ function UserChangePassword() {
            id='email'
            value={password}
            onChange={(e) => setPassword(e.target.value)}
-          
+          onBlur={validatePassword}
            className='border-2 border-cyan-800 p-3 rounded-lg bg-transparent placeholder:text-white w-full text-white'
          />
-
+          {passwordError && <p className='text-red-700 text-sm font-semibold'>{passwordError}</p>}
         <input
            type='password'
            placeholder='Confirm New Password'
            id='email'
            value={confirmPassword}
            onChange={(e) => setConfirmPassword(e.target.value)}
+          onBlur={validatePassword}
           
            className='border-2 border-cyan-800 p-3 rounded-lg bg-transparent placeholder:text-white w-full text-white'
          />
-
+          {confirmPasswordError && <p className='text-red-700 text-sm font-semibold'>{confirmPasswordError}</p>}
          <button
            onClick={submitHandler}
            disabled={isLoading}

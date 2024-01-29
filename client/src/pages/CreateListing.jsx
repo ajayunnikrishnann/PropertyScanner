@@ -152,52 +152,52 @@ export default function CreateListing() {
 
 
 
-    <div className="h-screen overflow bg-cover bg-center bg-opacity-50 " style={{ backgroundImage: "url('public/bg1.jpg')" }}>
+    <div className="h-screen overflow bg-cover bg-center bg-opacity-50 " style={{ backgroundImage: "url('/bg1.jpg')" }}>
     <Header />
     <main className='p-3 max-w-4xl mx-auto'>
       <h1 className='text-3xl font-semibold text-center my-7'>Create a Listing</h1>
       <form onSubmit={handleSubmit} className='flex flex-col sm:flex-row gap-4'>
         <div className='flex flex-col gap-4 flex-1'>
-          <input onChange={handleChange} value={formData.name} type='text' placeholder='Name' className='border p-3 rounded-lg  bg-black bg-opacity-35 placeholder:text-white' id='name' maxLength='62' minLength='10' required/>
-          <textarea onChange={handleChange} value={formData.description} type="text" placeholder='Description' className='border p-3 rounded-lg bg-black bg-opacity-35 placeholder:text-white' id='description' required/>
-          <input onChange={handleChange} value={formData.address} type='text' placeholder='Address' className='border p-3 rounded-lg bg-black bg-opacity-35 placeholder:text-white' id='address' required/>
+          <input onChange={handleChange} value={formData.name} type='text' placeholder='Name' className='border p-3 rounded-lg border-cyan-600 bg-cyan-950 bg-opacity-65 placeholder:text-white' id='name' maxLength='12' minLength='4' required/>
+          <textarea onChange={handleChange} value={formData.description} type="text" placeholder='Description' className='border p-3 rounded-lg border-cyan-600 bg-cyan-950 bg-opacity-65 placeholder:text-white' id='description' required/>
+          <input onChange={handleChange} value={formData.address} type='text' placeholder='Address' className='border p-3 rounded-lg border-cyan-600 bg-cyan-950 bg-opacity-65 placeholder:text-white' id='address' required/>
         <div className='flex gap-3 flex-wrap'>
           <div className='flex gap-2 items-center '>
-            <input onChange={handleChange} checked = {formData.type === 'sale'} type='checkbox' id='sale' className='w-5 bg-black bg-opacity-35 ' />
+            <input onChange={handleChange} checked = {formData.type === 'sale'} type='checkbox' id='sale' className='w-5 border-cyan-600 bg-cyan-950 bg-opacity-65 ' />
             <span>Sell</span>
           </div>
           <div className='flex gap-2 items-center'>
-            <input onChange={handleChange} checked = {formData.type === 'rent'} type='checkbox' id='rent' className='w-5 bg-black bg-opacity-35 ' />
+            <input onChange={handleChange} checked = {formData.type === 'rent'} type='checkbox' id='rent' className='w-5 border-cyan-600 bg-cyan-950 bg-opacity-65' />
             <span>Rent</span>
           </div>
           <div className='flex gap-2 items-center'>
-            <input onChange={handleChange} checked = {formData.parking} type='checkbox' id='parking' className='w-5 bg-black bg-opacity-35 ' />
+            <input onChange={handleChange} checked = {formData.parking} type='checkbox' id='parking' className='w-5 border-cyan-600 bg-cyan-950 bg-opacity-65 ' />
             <span>Parking spot</span>
           </div>
           <div className='flex gap-2 items-center'>
-            <input onChange={handleChange} checked={formData.furnished} type='checkbox' id='furnished' className='w-5 bg-black bg-opacity-35 ' />
+            <input onChange={handleChange} checked={formData.furnished} type='checkbox' id='furnished' className='w-5 border-cyan-600 bg-cyan-950 bg-opacity-65 ' />
             <span>Furnished</span>
           </div>
           <div className='flex gap-2 items-center'>
-            <input onChange={handleChange} checked={formData.offer} type='checkbox' id='offer' className='w-5 bg-black bg-opacity-35 ' />
+            <input onChange={handleChange} checked={formData.offer} type='checkbox' id='offer' className='w-5 border-cyan-600 bg-cyan-950 bg-opacity-65 ' />
             <span>Offer</span>
           </div>
         </div>
         <div className='flex flex-wrap flex-row gap-6'>
           <div className='flex  items-center gap-2'>
-            <input onChange={handleChange} value={formData.bedrooms} type='number' id='bedrooms' min='1' max='10' required className='p-1 border border-gray-300 rounded-lg bg-black bg-opacity-35 '/>
+            <input onChange={handleChange} value={formData.bedrooms} type='number' id='bedrooms' min='1' max='10' required className='p-1 border border-cyan-600 rounded-lg  bg-cyan-950 bg-opacity-65 '/>
 
             <p>Beds</p>
           </div>
 
           <div className='flex items-center gap-2'>
-            <input onChange={handleChange} value={formData.bathrooms} type='number' id='bathrooms' min='1' max='10' required className='p-1 border border-gray-300 rounded-lg bg-black bg-opacity-35 '/>
+            <input onChange={handleChange} value={formData.bathrooms} type='number' id='bathrooms' min='1' max='10' required className='p-1 border border-cyan-600 rounded-lg  bg-cyan-950 bg-opacity-65 '/>
 
             <p>Baths</p>
           </div>
 
           <div className='flex items-center gap-2'>
-            <input onChange={handleChange} value={formData.regularPrice} type='number' id='regularPrice' min='10000' max='1000000000' required className='p-3 border border-gray-300 rounded-lg bg-black bg-opacity-35 '/>
+            <input onChange={handleChange} value={formData.regularPrice} type='number' id='regularPrice' min='10000' max='1000000000' required className='p-3 border border-cyan-600 rounded-lg  bg-cyan-950 bg-opacity-65 '/>
               <div className='flex flex-col items-center'>
             <p>Regular Price</p>
             <span className='text-xs'>(₹ / month)</span>
@@ -205,7 +205,7 @@ export default function CreateListing() {
           </div>
           {formData.offer && (
           <div className='flex items-center gap-2'>
-            <input onChange={handleChange} value={formData.discountPrice} type='number' id='discountPrice' min='0' max='1000000' required className='p-3 border border-gray-300 rounded-lg bg-black bg-opacity-35 '/>
+            <input onChange={handleChange} value={formData.discountPrice} type='number' id='discountPrice' min='0' max='1000000' required className='p-3 border border-cyan-600 rounded-lg  bg-cyan-950 bg-opacity-65 '/>
             <div className='flex flex-col items-center'>
             <p>Discounted Price</p>
             <span className='text-xs'>(₹ / month)</span>
@@ -220,8 +220,8 @@ export default function CreateListing() {
           </p>
           <div className='flex gap-4'>
             <input onChange={(e)=> setFiles(e.target.files)} 
-            className='p-2  border  border-cyan-950 rounded w-full bg-black bg-opacity-35 ' type='file' id='images' accept='image/*' multiple />
-            <button type='button' disabled={uploading} onClick={handleImageSubmit} className='p-2 text-green-700 font-semibold border border-green-700 rounded uppercase hover:shadow-lg disabled:opacity-80 bg-white  '>
+            className='p-2  border  border-cyan-600 rounded w-full  bg-cyan-950 bg-opacity-65 ' type='file' id='images' accept='image/*' multiple />
+            <button type='button' disabled={uploading} onClick={handleImageSubmit} className='p-2 text-white font-semibold border border-cyan-600 rounded uppercase hover:shadow-lg disabled:opacity-80 bg-gradient-to-b  from-cyan-500 via-cyan-700 to-cyan-900 '>
               {uploading ? 'Uploading...' : 'Upload'}
               </button>
           </div>
@@ -242,7 +242,7 @@ export default function CreateListing() {
           }
           <button
             disabled = {loading || uploading}
-           className='p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80'>
+           className='p-3 bg-gradient-to-b  from-cyan-500 via-cyan-700 to-cyan-900 border-cyan-600 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80'>
             {loading ? 'Creating....' : 'Create listing'}
             </button>
             {error && <p className='text-red-700 text-sm'>{error}</p>}

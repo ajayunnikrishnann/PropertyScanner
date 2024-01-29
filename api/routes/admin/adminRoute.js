@@ -5,10 +5,11 @@ import {
     getUsers,
     blockUser,
     unBlockUser,
+    adminLogout,
     
 
 } from "../../controllers/admin/adminController.js";
-
+import { verifyToken } from "../../utils/verifyUser.js";
 import { createBanner, getBanners, deleteBanner } from "../../controllers/admin/bannerController.js";
 // import { multerUploadHotelImages } from "../../middleware/multerMiddleware.js";
 
@@ -19,7 +20,7 @@ router.post("/adminAuth", adminAuth);
 router.get("/getUsers",getUsers)
 router.get("/blockUser",blockUser)
 router.get("/unBlockUser",unBlockUser)
-
+router.post("/adminLogout", verifyToken, adminLogout)
 router.post("/createBanner", createBanner);
 router.get("/getBanners", getBanners);
 // router.put("/updateBanner/:id", updateBanner);

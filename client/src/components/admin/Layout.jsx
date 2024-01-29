@@ -4,7 +4,7 @@ import NavigationBar from './NavigationBar';
 
 const Layout = ({ children }) => {
   return (
-    <div className="flex">
+    <div className="flex bg-gray-500">
       <NavigationBar />
       <main className="grow">
         {children}

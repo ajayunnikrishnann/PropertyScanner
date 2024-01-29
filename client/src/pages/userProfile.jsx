@@ -19,6 +19,10 @@ export default function UserProfile() {
   const [updateProfile,{isLoading}] = useUpdateProfileMutation();
   const [getProfile] = useUsergetProfileMutation();
 
+  const isValidName = (name) => /^[a-zA-Z\s]*$/.test(name);
+  const isValidMobile = (mobile) => /^[0-9]{0,10}$/.test(mobile);
+
+
   const handleImage = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -35,9 +39,20 @@ export default function UserProfile() {
 
   const validateImage = (file) => {
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-    const maxSize = 4 * 1024 * 1024; // 2MB
+    const maxSize = 4 * 1024 * 1024; // 4MB
 
-    return allowedTypes.includes(file.type) && file.size <= maxSize;
+    if (!allowedTypes.includes(file.type)) {
+      setImageError('Unsupported file type. Please select a valid image (jpeg, png, gif).');
+      return false;
+    }
+  
+    if (file.size > maxSize) {
+      setImageError('File size exceeds the maximum limit (4MB). Please choose a smaller file.');
+      return false;
+    }
+  
+    setImageError('');
+    return true;
   };
 
 
@@ -47,7 +62,7 @@ export default function UserProfile() {
       userId: userInfo,
     });
     if (responseFromApiCall) {
-      const { userame, email, mobile, profileImageName } = responseFromApiCall.data.user;
+      const { username, email, mobile, profileImageName } = responseFromApiCall.data.user;
       setUserData({
         username,       
         email,
@@ -115,6 +130,7 @@ export default function UserProfile() {
           <input
             type="file"
             onChange={handleImage}
+            accept=".jpg, .jpeg, .png, .gif"
             className="max-w-full rounded-lg px-2 font-medium text-blue-600 outline-none ring-blue-600 focus:ring-1 ml-2"
           />
            {imageError && <p className="text-red-500 text-sm">{imageError}</p>}
@@ -125,20 +141,41 @@ export default function UserProfile() {
         <p className="shrink-0 w-32 font-medium">Username</p>
         <input
           value={username}
-          onChange={(e) => setUserName(e.target.value)}
+          onChange={(e) => {
+            const newName = e.target.value;
+            if (isValidName(newName)) {
+              setUserName(newName);
+            }
+          }}
           placeholder="First Name"
-          className="w-full rounded-md border bg-white px-2 py-2 outline-none ring-blue-600 focus:ring-1"
+          
+          className={`w-full rounded-md border bg-white px-2 py-2 outline-none ring-blue-600 focus:ring-1 ${
+            isValidName(username) ? '' : 'border-red-500'
+          }`}
         />
+        {!isValidName(username) && (
+          <p className="text-red-500 text-sm">Invalid name format</p>
+        )}
       </div>
   
       <div className="flex flex-col gap-4 w-full">
         <p className="shrink-0 w-32 font-medium">Mobile</p>
         <input
           value={mobile}
-          onChange={(e) => setMobile(e.target.value)}
-          placeholder="your.email@domain.com"
-          className="w-full rounded-md border bg-white px-2 py-2 outline-none ring-blue-600 focus:ring-1"
+          onChange={(e) => {
+            const newMobile = e.target.value;
+            if (isValidMobile(newMobile)) {
+              setMobile(newMobile);
+            }
+          }}
+          placeholder="Mobile"
+          className={`w-full rounded-md border bg-white px-2 py-2 outline-none ring-blue-600 focus:ring-1 ${
+            isValidMobile(mobile) ? '' : 'border-red-500'
+          }`}
         />
+        {!isValidMobile(mobile) && (
+          <p className="text-red-500 text-sm">Invalid mobile number format</p>
+        )}
       </div>
   
       <div className="justify-center items-center w-full">

@@ -46,7 +46,7 @@ function Header() {
     <h1 className="font-bold text-sm sm:text-xl flex items-center">
       <img src="/logo3.png" alt="Logo" className="w-20 object-cover" />
       <span className="ml-4">
-        <span className="bg-gradient-to-r from-green-500 via-green-100 to-green-500 inline-block text-transparent bg-clip-text absolute top-0 left-14 m-4">PropertyScanner</span> 
+        <span className="bg-white font-bold to-slate-200 inline-block text-transparent bg-clip-text absolute top-0 left-14 m-4 text-stroke" style={{ WebkitTextStroke: '0.25px ', textStroke: '0.25px ' }}>PropertyScanner</span> 
       </span>
     </h1>
     </Link>

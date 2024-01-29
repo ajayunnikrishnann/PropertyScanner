@@ -13,8 +13,12 @@ import {
     updateUserProfile,
     getProfile,
     getBanner,
+    getUserListings,
+
+
 } from '../../controllers/user/auth.controller.js'
 
+import { verifyToken } from '../../utils/verifyUser.js';
 
 
 
@@ -30,5 +34,6 @@ router.post('/changePassword',changePassword)
 router.post('/updateProfile',updateUserProfile)
 router.get('/getProfile',getProfile)
 router.get('/getUserBanner',getBanner)
+router.get('/listings/:id',verifyToken,getUserListings)
 
 export default router;
