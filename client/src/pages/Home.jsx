@@ -13,7 +13,7 @@ const Home = () => {
   
     <div className="min-h-screen flex flex-col items-stretch">
     <Header /> {/* Header comes first */}
-    <div className="absolute inset-0 shadow-md">
+    <div className="absolute inset-0 ">
       <img src={banners.image} alt="Banner" className="w-full h-98 object-cover  " />
     </div>
   </div>
