@@ -1,6 +1,9 @@
 import express from 'express';
 const router = express.Router();
+
 // import {  authUser } from '../controllers/user.controller.js';
+
+
 import {
     signup,
     verifyRegistration,
@@ -14,7 +17,7 @@ import {
     getProfile,
     getBanner,
     getUserListings,
-
+    getUser,
 
 } from '../../controllers/user/auth.controller.js'
 
@@ -35,5 +38,6 @@ router.post('/updateProfile',updateUserProfile)
 router.get('/getProfile',getProfile)
 router.get('/getUserBanner',getBanner)
 router.get('/listings/:id',verifyToken,getUserListings)
+router.get('/:id',verifyToken,getUser)
 
 export default router;

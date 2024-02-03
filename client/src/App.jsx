@@ -32,11 +32,12 @@ export default function App() {
           <Route path="/forgotPassword" element={<ForgotPassword />} />
           <Route path="/verifyotp" element={<Verifyotp />} />
           <Route path="/changePassword" element={<UserChangePassword />} />
-          <Route path="/profile" element={<UserProfile />} />
+       
           <Route path="/about" element={<About />} />
           <Route path="/listing/:listingId" element={<Listing />} />
 
           <Route element={<PrivateRoute />}>
+          <Route path="/profile" element={<UserProfile />} />
           <Route path="/createListing" element={<CreateListing />} />
           <Route path="/updateListing/:listingId" element={<UpdateListing />} />
           </Route>

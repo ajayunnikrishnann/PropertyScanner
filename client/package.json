@@ -24,6 +24,7 @@
     "mdb-react-ui-kit": "^7.1.0",
     "path": "^0.12.7",
     "primereact": "^10.3.0",
+    "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
@@ -32,7 +33,8 @@
     "react-router-dom": "^6.21.0",
     "react-toastify": "^9.1.3",
     "recharts": "^2.10.4",
-    "swiper": "^11.0.5"
+    "swiper": "^11.0.5",
+    "use-history": "^1.4.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",

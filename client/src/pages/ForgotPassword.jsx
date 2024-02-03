@@ -49,7 +49,7 @@ function ForgotPassword() {
     }
   return (
     
-    <div className="bg-cover bg-center bg-opacity-50 h-screen " style={{ backgroundImage: "url('public/bgsignup.jpg')" }}>
+    <div className="bg-cover bg-center bg-opacity-50 h-screen " style={{ backgroundImage: "url('/bgsignup.jpg')" }}>
 
     <div className="flex items-start">
   <Link to="/">

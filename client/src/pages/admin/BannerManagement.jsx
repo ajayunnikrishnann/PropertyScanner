@@ -18,6 +18,7 @@ const BannerManagement = () => {
 
   const [bannerTitle, setBannerTitle] = useState('');
   const [bannerImage, setBannerImage] = useState('');
+  const [imageError, setImageError] = useState('');
 
   // useEffect(() => {
   //   dispatch(setBanners(banners));
@@ -67,9 +68,15 @@ const BannerManagement = () => {
 
   const handleImage = (e) => {
     const file = e.target.files[0]
+    if (file) {
+      const isValid = validateImage(file);
+      if (isValid) {
     setFileToBase(file)
+    setImageError('');
+  } else {
+    setImageError('Invalid image type or size');
   }
-
+    }}
   const setFileToBase = (file) => {
     const reader = new FileReader()
     reader.readAsDataURL(file)
@@ -78,6 +85,24 @@ const BannerManagement = () => {
     }
 
   }
+
+  const validateImage = (file) => {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    const maxSize = 6 * 1024 * 1024; // 6MB
+
+    if (!allowedTypes.includes(file.type)) {
+      setImageError('Unsupported file type. Please select a valid image (jpeg, png, gif).');
+      return false;
+    }
+  
+    if (file.size > maxSize) {
+      setImageError('File size exceeds the maximum limit (4MB). Please choose a smaller file.');
+      return false;
+    }
+  
+    setImageError('');
+    return true;
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -96,10 +121,10 @@ const BannerManagement = () => {
           <input
              type="file"
                id="idimage"
-                accept=".jpg, .jpeg, .png, .pdf,.avif"
+               accept=".jpg, .jpeg, .png, .gif"
                  onChange={handleImage}
                     />
-       
+                {imageError && <p className="text-red-500 text-sm">{imageError}</p>}
           <button
             className="bg-cyan-800 text-white px-4 py-2 rounded"
             onClick={handleCreateBanner}

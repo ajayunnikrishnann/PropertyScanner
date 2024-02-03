@@ -90,7 +90,7 @@ function UserChangePassword() {
     }
 
   return (
-    <div className="bg-cover bg-center bg-opacity-50 h-screen" style={{ backgroundImage: "url('public/bgsignup.jpg')" }}>
+    <div className="bg-cover bg-center bg-opacity-50 h-screen" style={{ backgroundImage: "url('/bgsignup.jpg')" }}>
     <div  className='flex items-center justify-center p-8 pt-28'  >
       <form className='flex flex-col gap-3 border-2 border-cyan-800 p-6 rounded-lg sm:w-96 bg-teal-700 bg-opacity-50 ' >
         <h1 

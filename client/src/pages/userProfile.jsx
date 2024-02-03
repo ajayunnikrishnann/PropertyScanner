@@ -9,7 +9,9 @@ import { useUpdateProfileMutation, useUsergetProfileMutation } from '../slices/u
 import Header from '../components/Header';
 import { Link } from 'react-router-dom';
 
+
 export default function UserProfile() {
+
   const [userData, setUserData] = useState('');
   const { userInfo } = useSelector((state) => state.auth);
   const [visible, setVisible] = useState(false);
@@ -26,7 +28,7 @@ export default function UserProfile() {
 
 
   const handleImage = (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files[0]; 
     if (file) {
       const isValid = validateImage(file);
       if (isValid) {
@@ -102,7 +104,8 @@ export default function UserProfile() {
       if (response && response.data) {
         fetchUserProfile();
         // alert('Successfully updated');
-      } else {
+
+      }else {
         alert('An error occurred. Please try again.');
       }
     } catch (err) {
@@ -236,14 +239,14 @@ const handleListingDelete = async (listingId) => {
         <h1 className='text-center mt-7 text-2xl font-semibold'>Your Listings</h1>
        {userListings.map((listing)=> (
         <div key= {listing._id} className='border rounded-lg p-3 flex justify-between items-center gap-4'>
-          <Link to={`/listings/${listing._id}`}>
+          <Link to={`/listing/${listing._id}`}>
             <img 
             src={listing.imageUrls[0]}
              alt='listing cover'
              className='h-16 w-16 object-contain '
              />
           </Link>
-          <Link className=' text-slate-700 font-semibold  hover:underline truncate flex-1' to={`/listings/${listing._id}`}>
+          <Link className=' text-slate-700 font-semibold  hover:underline truncate flex-1' to={`/listing/${listing._id}`}>
           <p>{listing.name}</p>
           </Link>
           <div className='flex flex-col items-center'>

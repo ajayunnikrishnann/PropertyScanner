@@ -94,7 +94,7 @@ function SignIn() {
     }
 
   return (
-<div className="h-screen overflow bg-cover bg-center bg-opacity-50  " style={{ backgroundImage: "url('public/bgsignup.jpg')" }}>
+<div className="h-screen overflow bg-cover bg-center bg-opacity-50  " style={{ backgroundImage: "url('/bgsignup.jpg')" }}>
    
 <div className="flex items-start">
   <Link to="/">
