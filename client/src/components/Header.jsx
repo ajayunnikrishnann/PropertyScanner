@@ -51,15 +51,28 @@ function Header() {
     </h1>
     </Link>
     </div>
+    <div className='pl-52'>
+    <form className='bg-cyan-700   rounded-lg flex items-center'>
+        
+          <input
+            type='text'
+            placeholder='Search...'
+            className='bg-transparent focus:outline-none w-1 sm:w-36 h-6 pl-2  placeholder:text-black border-none focus:border-none focus:ring-0'
+          />
+          <button>
+            <FaSearch className='text-black ' />
+          </button>
+        </form>
+        </div>
     {/* <div className='flex justify-between items-center max-w-6xl '>
     <form className='bg-cyan-700 bg-opacity-50 p-1  rounded-lg flex items-center'>
       <input type='text' placeholder='Search...' className='bg-transparent pl-2 focus:outline-none w-24 sm:w-64 placeholder:text-black'/>
       <FaSearch className='text-slate-950'/>
     </form>
-    </div> */}
+    </div>  */}
     <ul className='flex gap-4'>
       <Link to='/createListing'>
-      <button className='hidden sm:inline font-bold bg-cyan-700 rounded-lg text-amber-200 hover:text-white border border-cyan-900'>+Post Your Property</button>
+      <button className='hidden sm:inline font-bold bg-cyan-700 rounded-lg text-black hover:text-white pl-2 pr-2'>+Post Your Property</button>
       </Link>
       <Link to='/'>
       <li className='hidden sm:inline font-bold  text-slate-950 hover:text-white  '>Home</li>

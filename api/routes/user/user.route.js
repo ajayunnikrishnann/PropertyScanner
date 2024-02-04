@@ -18,6 +18,7 @@ import {
     getBanner,
     getUserListings,
     getUser,
+    
 
 } from '../../controllers/user/auth.controller.js'
 
@@ -39,5 +40,6 @@ router.get('/getProfile',getProfile)
 router.get('/getUserBanner',getBanner)
 router.get('/listings/:id',verifyToken,getUserListings)
 router.get('/:id',verifyToken,getUser)
+
 
 export default router;
