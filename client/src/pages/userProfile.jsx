@@ -152,10 +152,10 @@ const handleListingDelete = async (listingId) => {
 }
 
   return (
-    <div>
+    <div  className="h-screen overflow bg-cover bg-center bg-opacity-50 " style={{ backgroundImage: "url('/bg1.jpg')" }}>
      <Header />
-    <div className="flex items-center justify-center">
-    <div className="my-4 max-w-screen-md border px-4 shadow-xl sm:rounded-xl sm:px-4 sm:py-1 md:mx-auto w-full">
+    <div className="flex items-center justify-center ">
+    <div className="my-4 max-w-screen-md border px-4 shadow-xl sm:rounded-xl sm:px-4 sm:py-1 md:mx-auto w-full bg-black bg-opacity-30">
       <p className="font-medium text-3xl mb-10 text-center">Profile Details</p>
   
       <div className="flex flex-col items-center gap-4 w-full">
@@ -188,7 +188,7 @@ const handleListingDelete = async (listingId) => {
           }}
           placeholder="First Name"
           
-          className={`w-full rounded-md border bg-white px-2 py-2 outline-none ring-blue-600 focus:ring-1 ${
+          className={`w-full rounded-md border bg-black bg-opacity-50 text-white px-2 py-2 outline-none ring-blue-600 focus:ring-1 ${
             isValidName(username) ? '' : 'border-red-500'
           }`}
         />
@@ -208,7 +208,7 @@ const handleListingDelete = async (listingId) => {
             }
           }}
           placeholder="Mobile"
-          className={`w-full rounded-md border bg-white px-2 py-2 outline-none ring-blue-600 focus:ring-1 ${
+          className={`w-full rounded-md border bg-black bg-opacity-50 text-white px-2 py-2 outline-none ring-blue-600 focus:ring-1 ${
             isValidMobile(mobile) ? '' : 'border-red-500'
           }`}
         />
@@ -217,11 +217,11 @@ const handleListingDelete = async (listingId) => {
         )}
       </div>
   
-      <div className="justify-center items-center w-full">
+      <div className="justify-center items-center  w-full">
         <button
           onClick={handleSubmit}
           disabled={isLoading}
-          className="mt-3 rounded-lg border-2 border-transparent bg-gradient-to-b  from-cyan-500 via-cyan-700 to-cyan-900 px-4 py-2 font-medium text-white focus:outline-none focus:ring hover:bg-cyan-700"
+          className="mt-3 rounded-lg border-2 flex flex-col border-transparent bg-gradient-to-b  from-cyan-500 via-cyan-700 to-cyan-900 px-4 py-2 font-medium text-white focus:outline-none focus:ring hover:bg-cyan-700"
         >
           {isLoading ? (
             <LoaderComponent buttonText="Updating..." />
@@ -230,7 +230,7 @@ const handleListingDelete = async (listingId) => {
           )}
         </button>
 
-        <button onClick={handleShowListings} className='text-white font-semibold rounded-md border-2 w-40 ml-48 bg-gradient-to-b  from-cyan-500 via-cyan-700 to-cyan-900'>Show Listings</button>
+        <button onClick={handleShowListings} className='text-white  w-36 font-semibold rounded-md  mt-2  mx-auto bg-gradient-to-b  from-cyan-500 via-cyan-700 to-cyan-900'>Show Listings</button>
       <p className='text-red-700 mt-5'>{showListingsError ? 'Error showing listings' : ''}</p>
      
       {userListings && 

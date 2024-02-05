@@ -12,6 +12,7 @@ function Header() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const {userInfo} = useSelector((state) => state.auth)
+  const [searchTerm, setSearchTerm] = useState('')
 
   const [username,setUserName] = useState('')
 
@@ -36,8 +37,21 @@ function Header() {
     }
   }
 
-  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const urlParams = new URLSearchParams(window.location.search)
+    urlParams.set('searchTerm',searchTerm)
+    const searchQuery = urlParams.toString();
+    navigate(`/search?${searchQuery}`)
+  }
 
+  useEffect( () => {
+    const urlParams = new URLSearchParams(location.search);
+    const searchTermFromUrl = urlParams.get('searchTerm');
+    if (searchTermFromUrl) {
+       setSearchTerm(searchTermFromUrl);
+    }
+  },[location.search] )
   return (
     
     <header className="sticky top-3 z-50 ml-3 mr-3 bg-gradient-to-b  from-cyan-500 via-cyan-700 to-cyan-900 flex items-center justify-between h-12 bg-slate-300  shadow-md py-6 px-6 rounded-lg">
@@ -52,13 +66,15 @@ function Header() {
     </Link>
     </div>
     <div className='pl-52'>
-    <form className='bg-cyan-700   rounded-lg flex items-center'>
+    <form onSubmit={handleSubmit} className='bg-cyan-700   rounded-lg flex items-center'>
         
           <input
             type='text'
             placeholder='Search...'
             className='bg-transparent focus:outline-none w-1 sm:w-36 h-6 pl-2  placeholder:text-black border-none focus:border-none focus:ring-0'
-          />
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+         />
           <button>
             <FaSearch className='text-black ' />
           </button>
