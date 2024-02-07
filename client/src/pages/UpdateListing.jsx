@@ -173,7 +173,7 @@ export default function CreateListing() {
       <h1 className='text-3xl font-semibold text-center my-7'>Update a Listing</h1>
       <form onSubmit={handleSubmit} className='flex flex-col sm:flex-row gap-4'>
         <div className='flex flex-col gap-4 flex-1'>
-          <input onChange={handleChange} value={formData.name} type='text' placeholder='Name' className='border p-3 rounded-lg border-cyan-600 bg-cyan-950 bg-opacity-65 placeholder:text-white' id='name' maxLength='20' minLength='4' required/>
+          <input onChange={handleChange} value={formData.name} type='text' placeholder='Name' className='border p-3 rounded-lg border-cyan-600 bg-cyan-950 bg-opacity-65 placeholder:text-white' id='name' maxLength='50' minLength='4' required/>
           <textarea onChange={handleChange} value={formData.description} type="text" placeholder='Description' className='border p-3 rounded-lg border-cyan-600 bg-cyan-950 bg-opacity-65 placeholder:text-white' id='description' required/>
           <input onChange={handleChange} value={formData.address} type='text' placeholder='Address' className='border p-3 rounded-lg border-cyan-600 bg-cyan-950 bg-opacity-65 placeholder:text-white' id='address' required/>
         <div className='flex gap-3 flex-wrap'>
@@ -220,7 +220,7 @@ export default function CreateListing() {
           </div>
           {formData.offer && (
           <div className='flex items-center gap-2'>
-            <input onChange={handleChange} value={formData.discountPrice} type='number' id='discountPrice' min='0' max='1000000' required className='p-3 border border-cyan-600 rounded-lg  bg-cyan-950 bg-opacity-65 '/>
+            <input onChange={handleChange} value={formData.discountPrice} type='number' id='discountPrice' min='0' max='1000000000' required className='p-3 border border-cyan-600 rounded-lg  bg-cyan-950 bg-opacity-65 '/>
             <div className='flex flex-col items-center'>
             <p>Discounted Price</p>
             <span className='text-xs'>(₹ / month)</span>

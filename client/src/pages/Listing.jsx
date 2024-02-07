@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import { useParams } from 'react-router-dom'
-import Header from '../components/Header';
+// import Header from '../components/Header';
 import {Swiper , SwiperSlide} from 'swiper/react'
 import SwiperCore from 'swiper'
 import {Navigation} from 'swiper/modules'
@@ -52,7 +52,7 @@ export default  function Listing() {
     },[params.listingId])
   return (
     <div className='min-h-screen flex flex-col items-stretch'>
-        <Header />
+        {/* <Header /> */}
     <main>
     
         {loading && <p className='text-center my-7 text-2xl'>Loading...</p>}

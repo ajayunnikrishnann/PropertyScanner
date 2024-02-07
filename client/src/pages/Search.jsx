@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import { useNavigate } from 'react-router-dom';
+import ListingItem from '../components/ListingItem';
 
 function Search() {
     const navigate = useNavigate()
@@ -16,7 +17,8 @@ function Search() {
 
     const [loading, setLoading] = useState(false)
     const [listings,setListings] = useState([])
-   console.log(listings);
+    const [showMore,setShowMore] = useState(false)
+   
 useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const searchTermFromUrl = urlParams.get('searchTerm');
@@ -48,9 +50,15 @@ useEffect(() => {
     }
     const fetchListings = async () => {
         setLoading(true);
+        setShowMore(false);
         const searchQuery = urlParams.toString();
         const res = await fetch(`/api/listing/get?${searchQuery}`);
         const data = await res.json();
+        if(data.length > 11){
+            setShowMore(true)
+        }else {
+            setShowMore(false)
+        }
         setListings(data)
         setLoading(false)
 
@@ -95,8 +103,23 @@ useEffect(() => {
         navigate(`/search?${searchQuery}`)
     }
 
+    const onShowMoreClick = async () => {
+        const numberOfListings = listings.length;
+        const startIndex = numberOfListings;
+        const urlParams = new URLSearchParams(location.search)
+        urlParams.set('startIndex',startIndex)
+        const searchQuery = urlParams.toString();
+        const res = await fetch(`/api/listing/get?${searchQuery}`)
+        const data = await res.json();
+
+        if(data.length < 12){
+            setShowMore(false)
+        }
+        setListings([...listings, ...data])
+    }
+
   return (
-    <div className="min-h-screen flex flex-col items-stretch ">
+    <div className="min-h-screen flex flex-col items-stretch  ">
     <Header /> 
     <div className="absolute inset-0  ">
     <div className=''>
@@ -107,7 +130,7 @@ useEffect(() => {
                 <label className='whitespace-nowrap text-white'></label>
                 <input type='text' id='searchTerm' placeholder='Search...' value={sidebardata.searchTerm} onChange={handleChange} className='border rounded-lg p-3 w-56'/>
             </div>
-            <div className='flex gap-4 flex-wrap items-center text-white'>
+            <div className='flex gap-5 flex-wrap items-center text-white'>
                 <label className='text-cyan-800 font-semibold'></label>
                 <div className='flex flex-col gap-1 items-center '>
                     <input type='checkbox' id='all' onChange={handleChange} checked={sidebardata.type === 'all'} className='w-5 items-center justify-center ' />
@@ -124,7 +147,7 @@ useEffect(() => {
                     <span>Sale</span>
                 </div>
 
-                <div className='flex flex-col gap-1 items-center '>
+                <div className='flex flex-wrap gap-1 items-center '>
                     <input type='checkbox' id='offer' onChange={handleChange} checked={sidebardata.offer} className='w-5 items-center justify-center ' />
                     <span>Offer</span>
                 </div>
@@ -156,8 +179,26 @@ useEffect(() => {
          </div>
          </div>
     </div>
-    <div className=''>
-    <h1 className='text-2xl font-semibold   text-slate-700 '>Listing Results</h1>
+    <div className='flex-1'>
+    <h1 className='text-2xl font-semibold pl-2  text-slate-700 '>Listing Results</h1>
+    <div className='pl-10 pt-4 flex flex-wrap gap-6'>
+        {!loading && listings.length === 0 && (
+            <p className='text-xl text-slate-700'>No listing found!</p>
+        )}
+        {loading && (
+            <p className='text-xl text-slate-700 text-center w-full'>Loading...</p>
+        )}
+
+        {!loading && listings && listings.map((listing) => (
+        <ListingItem key={listing._id} listing={listing}/>))}
+
+        {showMore && (
+            <button onClick={onShowMoreClick}
+            className='text-green-700 hover:underline p-7 text-center w-full'>
+                Show more
+            </button>
+        )}
+    </div>
     </div>
     </div>
     </div>
