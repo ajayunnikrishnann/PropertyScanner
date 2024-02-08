@@ -66,7 +66,7 @@ function Header() {
     </Link>
     </div>
     <div className='pl-52'>
-    <form onSubmit={handleSubmit} className='bg-cyan-700   rounded-lg flex items-center'>
+    <form onSubmit={handleSubmit} className='bg-cyan-700   rounded-br-full pr-4 flex items-center'>
         
           <input
             type='text'
@@ -88,7 +88,7 @@ function Header() {
     </div>  */}
     <ul className='flex gap-4'>
       <Link to='/createListing'>
-      <button className='hidden sm:inline font-bold bg-cyan-700 rounded-lg text-black hover:text-white pl-2 pr-2'>+Post Your Property</button>
+      <button className='hidden sm:inline font-bold bg-cyan-700 rounded-bl-lg text-black hover:text-white pl-2 pr-4'>+Post Your Property</button>
       </Link>
       <Link to='/'>
       <li className='hidden sm:inline font-bold  text-slate-950 hover:text-white  '>Home</li>
