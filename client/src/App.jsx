@@ -8,7 +8,7 @@ import Register from "./pages/Register";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ForgotPassword from "./pages/ForgotPassword";
-import Verifyotp from "./pages/verifyotp";
+import Verifyotp from "./pages/Verifyotp";
 import UserChangePassword from "./pages/UserChangePassword";
 import UserProfile from "./pages/userProfile";
 import CreateListing from "./pages/CreateListing";
