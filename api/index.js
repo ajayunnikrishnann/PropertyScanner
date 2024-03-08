@@ -47,7 +47,8 @@ app.use("/api/stripe",stripe );
 
 if (process.env.NODE_ENV === 'production') {
     const __dirname = path.resolve();
-    const clientDistPath = path.join(__dirname, '/client/dist');
+    // const clientDistPath = path.join(__dirname, '/client/dist');
+    const clientDistPath = path.join(__dirname, 'client', 'dist');
 
     app.use(express.static(clientDistPath));
 
