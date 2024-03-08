@@ -53,8 +53,9 @@ const loginScreen = () => {
                className='border-2 border-cyan-800 p-3 rounded-lg bg-transparent placeholder:text-white w-full text-white '
              />
           
+          
              <input
-               type='text'
+               type='password'
                placeholder='Password'
                id='password'
                value={password}

@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 
 const adminSchema = mongoose.Schema(
   {
+ 
     email: {
       type: String,
       required: true,
@@ -14,7 +15,7 @@ const adminSchema = mongoose.Schema(
     },
   },
   {
-    timestamps: true, // This will automatically add timestamps for any operations done.
+    timestamps: true, 
   }
 );
 

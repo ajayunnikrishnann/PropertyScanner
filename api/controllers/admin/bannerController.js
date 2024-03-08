@@ -38,22 +38,7 @@ export const createBanner = async (req, res) => {
         }
     }
 
-    // export const updateBanner = async(req,res) =>{
-    //     try {
-    //         const { id } =req.params;
-    //         const { title, image } = req.body
-
-    //     const updateBanner = await Banner.findByIdAndUpdate(
-    //         id,
-    //         { title, image },
-    //         {new: true }
-    //     )    
-    //         res.status(200).json(updateBanner)
-    //     } catch (error) {
-    //         console.error("Error updating banner:", error);
-    //         res.status(500).json({ message: "Internal Server Error" }); 
-    //     }
-    // }
+   
 
     export const deleteBanner = async(req,res)=>{
         try {

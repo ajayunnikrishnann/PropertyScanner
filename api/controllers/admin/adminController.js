@@ -1,8 +1,9 @@
 import Admin from "../../Models/adminModel.js";
 import asyncHandler from "express-async-handler";
 import AdmingenarateToken from "../../utils/adminGenerateToken.js";
+// import { blocksUser,unblocksUser } from "../../helpers/adminHelpers.js";
 import User from "../../Models/user.Model.js"
-import { userApiSlice } from "../../../client/src/slices/apiSlice.js";
+import Listing from "../../Models/listing.models.js";
 
 
 export const adminAuth = asyncHandler(async (req, res) => {
@@ -54,34 +55,48 @@ export const registerAdmin = asyncHandler(async (req, res) => {
     }
   });
 
- export const getUsers = async(req,res,next)=>{
-  try {
-    const users = await User.find({})
-    res.status(201).json(users)
-  } catch (error) {
-    next(error)
-  }
- }
 
- export const blockUser = async(req,res,next)=>{
-  const {id} = req.query
-  try {
-    const users = await User.updateOne({_id:id},{isBlocked:true})
-    res.status(201).json({message:'User Blocked'})
-  } catch (error) {
-    next(error)
-  }
- }
 
- export const unBlockUser = async(req,res,next)=>{
-  const {id} = req.query
-  try {
-    const users = await User.updateOne({_id:id},{isBlocked:false})
-    res.status(201).json({message:'User UnBlocked'})
-  } catch (error) {
-    next(error)
+
+export const  getUsers = asyncHandler(async (req, res) => {
+  const usersData = await User.find({}, { username: 1, email: 1, mobile: 1, isBlocked: 1, profileImageName: 1 });
+ 
+  if(usersData){
+      res.status(200).json({ usersData });
+  }else{
+      res.status(404);
+      throw new Error("Users data fetch failed.");
   }
- }
+});
+
+export const blockUser = asyncHandler( async (req, res) => {
+  const userId = req.body.userId;
+ console.log(req.body);
+  const usersBlockStatus = await User.findByIdAndUpdate({_id:userId},{$set:{isBlocked:true}});
+  if(usersBlockStatus.success){
+      const response = usersBlockStatus.message;
+      res.status(200).json({ message:response });
+  }else{
+      res.status(404);
+      const response = usersBlockStatus.message;
+      throw new Error(response);
+  }
+});
+
+export const unBlockUser = asyncHandler( async (req, res) => {
+  const userId = req.body.userId;
+  const usersBlockStatus =   await User.findByIdAndUpdate({_id:userId},{$set:{isBlocked:false}});
+  if(usersBlockStatus.success){
+      const response = usersBlockStatus.message;
+      res.status(200).json({ message:response });
+  }else{
+      res.status(404);
+      const response = usersBlockStatus.message;
+      throw new Error(response);
+  }
+});
+
+
 
  export const adminLogout = asyncHandler(async(req,res)=> {
   res.cookie("Adminjwt","", {
@@ -90,3 +105,16 @@ export const registerAdmin = asyncHandler(async (req, res) => {
   })
   res.status(200).json({message:  "Logout successfull"})
  })
+
+ export const getBoostedListings = async (req, res) => {
+  try {
+    const boostedListings = await Listing.find({ isBoosted: true })
+      .select('name imageUrls expiresOn')
+      .populate({ path:'userRef',  select:'username' ,model: 'User'});
+
+    res.status(200).json(boostedListings);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};

@@ -1,7 +1,38 @@
 import React from 'react'
 import UsersTable from '../../components/admin/UserTable'
+import { useEffect, useState } from 'react'
+import { toast } from "react-toastify";
+import { useGetUsersMutation } from '../../slices/adminApiSlice';
+import Loading from "../../components/Loading"
 
-function UserManagement() {
+
+export const  UserManagement = () => {
+  const [usersData, setUsersData] = useState([]);
+  const [usersDataFromAPI, { isLoading } ] = useGetUsersMutation();
+
+  useEffect(() => {
+    try {
+      const fetchData = async () => {
+        const responseFromApiCall = await usersDataFromAPI();
+        if (responseFromApiCall.error) {
+          // Handle error
+          console.error("Error fetching users:", responseFromApiCall.error);
+          toast.error("Error fetching users. Please try again.");
+          return;
+        }
+  
+        console.log("API Response:", responseFromApiCall);
+  
+        const usersArray = responseFromApiCall.data.usersData;
+        setUsersData(usersArray);
+      };
+      fetchData();
+    } catch (error) {
+      toast.error(error);
+      console.error("Error fetching users:", error);
+    }
+  }, [usersDataFromAPI]);
+
   return (
     <div>
  <div className="header-margin">
@@ -17,7 +48,7 @@ function UserManagement() {
             Users
           </h1>
           <div className="py-8 px-8 rounded-lg bg-white shadow-md mt-4">
-            <UsersTable />
+             { isLoading ? <Loading/> : <UsersTable users={usersData} setUsersData={setUsersData}/>}
           </div>
         </div>
         

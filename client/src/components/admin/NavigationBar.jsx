@@ -31,11 +31,11 @@ const navLinks =[
         path: '/adminDashboard/usermanagement',
     },
   
-    {
-        name: "Property",
-        icon:School,
-        path: '/adminDashboard/property',
-    },
+    // {
+    //     name: "Property",
+    //     icon:School,
+    //     path: '/adminDashboard/property',
+    // },
     {
         name: "Banner",
         icon:ImageIcon,

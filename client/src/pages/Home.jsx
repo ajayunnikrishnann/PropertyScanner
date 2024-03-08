@@ -3,13 +3,30 @@ import { useGetUserBannerQuery } from "../slices/usersApiSlice";
 import Header from "../components/Header";
 import { Link } from "react-router-dom";
 import ListingItem from "../components/ListingItem";
+import Loading from "../components/Loading";
+import Footer from "../components/Footer";
 const Home = () => {
   const [offerListings,setOfferListings] = useState([]);
   const [saleListings,setSaleListings] = useState([]);
   const [rentListings,setRentListings] = useState([]);
-
-  console.log(saleListings);
+  const [boostedListings, setBoostedListings] = useState([]);
+  
   useEffect(() => {
+    const fetchBoostedListings = async () => {
+      try {
+        const res = await fetch('/api/listing/get?isBoosted=true&limit=4');
+        const data = await res.json();
+        console.log('Boosted Listings:', data); // Add this line for debugging
+        setBoostedListings(data);
+        
+      } catch (error) {
+        console.log(error);
+      }
+    
+    };
+    fetchBoostedListings();
+  
+
     const fetchOfferListings = async () => {
       try {
         const res = await fetch('/api/listing/get?offer=true&limit=4');
@@ -42,24 +59,28 @@ const Home = () => {
     };
     fetchOfferListings();
   }, []);
+
   const { data: banners, isLoading, isError } = useGetUserBannerQuery();
 
 
   if (isLoading) {
-    return <div>Loading banners...</div>;
+   return   <Loading />
+    // return <div>Loading banners...</div>;
   }
 
   return (
-
+<div>
     <div className="min-h-screen flex flex-col items-stretch">
     <Header /> 
+    
     <div className="absolute inset-0 ">
       
       <div>     
       <img src={banners.image} alt="Banner" className="w-full h-full object-cover" />
+     
       <div >
-        <div className="flex flex-col gap-4 p-28 px-3 max-w-6xl mx-auto absolute top-2">
-          <h1 className="text-slate-700 font-bold text-3xl lg:text-6xl">Find your next <span className="text-slate-500">perfect</span>
+        <div className="flex flex-col gap-4 top-0 p-16  lg:py-28 px-3  lg:max-w-6xl mx-auto absolute lg:top-2">
+          <h1 className="text-slate-700 font-bold md:text-3xl lg:text-6xl">Find your next <span className="text-slate-500">perfect</span>
           <br />
           Home with ease
           </h1>
@@ -69,13 +90,33 @@ const Home = () => {
               We have a wide range of properties for you to choose from.
           </div> */}
           <Link to={"/search"} className="text-xs sm:text-sm text-white font-bold ">
-          <button className="bg-gradient-to-b  from-cyan-500 via-cyan-700 to-cyan-900 rounded-br-full pl-2 pr-4  border border-gray-50 hover:text-gray-300">Click here for the perfect start...</button>
+          <button className="bg-gradient-to-b  from-slate-500 via-slate-600 to-slate-700 rounded-br-full pl-2 pr-4  border border-gray-50 hover:text-gray-300">Click here for the perfect start...</button>
           </Link>
           </div>
         </div>
         
         </div>
         <div className="max-w-7xl pl-1 mx-auto  flex flex-col gap-4 ">
+        {boostedListings && boostedListings.length > 0 && (
+        <div className="max-w-7xl pl-1 mx-auto flex flex-col gap-4 ">
+          <div className="">
+            <div className="my-1">
+              <h2 className="text-2xl font-semibold text-slate-600 ">Top Searches</h2>
+              <Link className='text-sm text-blue-800 hover:underline' to='/search?isBoosted=true'>Show more</Link>
+              {/* You can add a link to see more boosted listings if needed */}
+            </div>
+
+            <div className="flex flex-wrap gap-6">
+            {boostedListings
+          .filter((listing) => listing.isBoosted) // Filter only boosted listings
+          .map((listing) => (
+            <ListingItem listing={listing} key={listing._id} />
+          ))}
+            </div>
+          </div>
+        </div>
+      )}
+
             {
               offerListings &&  offerListings.length > 0 && (
                 <div className="">
@@ -89,7 +130,9 @@ const Home = () => {
                     <ListingItem listing={listing} key={listing._id} />
                   ))}
              
+
                   </div>
+
 
                 </div>
               )
@@ -122,7 +165,7 @@ const Home = () => {
                       <Link className='text-sm text-blue-800 hover:underline' to='/search?type=sale'>Show more places for sale</Link>
                   </div>
 
-                  <div className="flex flex-wrap gap-6">
+                  <div className="flex flex-wrap gap-6 mb-6">
                   {saleListings.map((listing) => (
                     <ListingItem listing={listing} key={listing._id} />
                   ))}
@@ -133,8 +176,14 @@ const Home = () => {
               )
             }
         </div>
+        <div className="z-10 ">
+<Footer  />
+</div>
     </div>
+ 
   </div>
+
+</div>
  )  
   }
 export default Home;

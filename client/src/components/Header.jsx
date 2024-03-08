@@ -5,6 +5,12 @@ import { useNavigate } from 'react-router-dom'
 import { logout } from '../slices/authSlice'
 import { useLogoutMutation } from '../slices/usersApiSlice'
 import { useState, useEffect } from 'react'
+// import { MdChatBubble } from 'react-icons/md';
+import { BsChatDots } from 'react-icons/bs';
+import { Dropdown } from 'flowbite-react';
+
+
+
 
 
 
@@ -15,7 +21,11 @@ function Header() {
   const [searchTerm, setSearchTerm] = useState('')
 
   const [username,setUserName] = useState('')
+  const [showDropdown, setShowDropdown] = useState(false);
 
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
 
 
   useEffect(()=>{
@@ -65,7 +75,7 @@ function Header() {
     </h1>
     </Link>
     </div>
-    <div className='pl-52'>
+    <div className='pl-60 pt-1 '>
     <form onSubmit={handleSubmit} className='bg-cyan-700   rounded-br-full pr-4 flex items-center'>
         
           <input
@@ -80,23 +90,54 @@ function Header() {
           </button>
         </form>
         </div>
-    {/* <div className='flex justify-between items-center max-w-6xl '>
-    <form className='bg-cyan-700 bg-opacity-50 p-1  rounded-lg flex items-center'>
-      <input type='text' placeholder='Search...' className='bg-transparent pl-2 focus:outline-none w-24 sm:w-64 placeholder:text-black'/>
-      <FaSearch className='text-slate-950'/>
-    </form>
-    </div>  */}
-    <ul className='flex gap-4'>
-      <Link to='/createListing'>
-      <button className='hidden sm:inline font-bold bg-cyan-700 rounded-bl-lg text-black hover:text-white pl-2 pr-4'>+Post Your Property</button>
+   
+
+
+
+    <ul className='flex gap-5 mt-2'>
+    <div className=''>
+        <Dropdown label="For Buyers/Owners" style={{ height: '20px' , position: 'relative', top: '4px' ,left: '26px',background: 'none',outline: 'none'  }} className="w-44   bg-slate-300 bg-opacity-75 text-white font-semibold flex items-center justify-center">
+    <Link to='/createListing' className='relative'>
+        <Dropdown.Item>Post Property</Dropdown.Item>
       </Link>
+      <Link to='/auctionListing' className='relative'>
+      <Dropdown.Item>Create Auction Listing</Dropdown.Item>
+      </Link>
+      <Link to='/listingsAuction' className='relative'>
+      <Dropdown.Item>Show Auction Listings</Dropdown.Item>
+      </Link>
+      <Dropdown.Divider />
+      <Link to='/about' className='relative'>
+      <Dropdown.Item>About</Dropdown.Item>
+      </Link>
+    </Dropdown>
+    </div>
+    
+{/* 
+    <Link to='/createListing' className='relative'>
+  <button onClick={toggleDropdown} className='inline-flex items-center font-bold text-black hover:text-white pl-2'>
+     <span>Post Property</span>
+  </button>
+</Link> */}
+
+
+
+      <Link to='/chat'>
+    <button className=' text-nowrap  text-black hover:text-slate-700 pl-2 '>
+      <BsChatDots  className='mr-2' size={28} /> {/* Adjust the size as needed */}
+      
+    </button>
+  </Link>
+
       <Link to='/'>
       <li className='hidden sm:inline font-bold  text-slate-950 hover:text-white  '>Home</li>
       </Link>
 
-      <Link to='/about'>
+      {/* <Link to='/about'>
       <li className='hidden sm:inline font-bold  text-slate-950 hover:text-white'>About</li>
-      </Link>
+      </Link> */}
+
+      
 
 
       {userInfo ? (

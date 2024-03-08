@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, {Schema} from "mongoose";
 
 const listingSchema = new mongoose.Schema(
     {
@@ -54,7 +54,36 @@ const listingSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        isBoosted: {
+            type: Boolean,
+            default: false,
+          },
+        expiresOn: {
+            type: Date,
+            default: null
+          },
+        isAuction: {
+            type: Boolean,
+            default: false,
+        },
+        isTimer: {
+            type: Boolean,
+            default: false,
+        },
+        expiresOn: {
+            type: Date,
+            default: () => new Date(+new Date() + 7 * 24 * 60 * 60 * 1000), 
+          },
+          RegisteredUsers:{
+            type: Array,
+        },
+        Winner:{
+            type:  Schema.Types.ObjectId,
+            ref: 'User',
+          default: null,
+        },
 
+        
     },{timestamps: true}
 )
 

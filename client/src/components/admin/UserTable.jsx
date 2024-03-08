@@ -1,140 +1,269 @@
 import { useState } from "react";
-import { useGetUsersQuery } from "../../slices/adminApiSlice";
-import Pagination from "../Pagination";
-import { useBlockUserMutation, useUnBlockUserMutation } from "../../slices/adminApiSlice";
+import { useBlockUserByAdminMutation,useUnblockUserByAdminMutation } from "../../slices/adminApiSlice";
+import PropTypes from 'prop-types'
+import { toast } from "react-toastify";
+import { FaSearch } from 'react-icons/fa'
+import { Dialog } from '@headlessui/react'
+import ReactPaginate from "react-paginate";
+
+const UsersTable = ({users, setUsersData}) => {
+      UsersTable.propTypes = {
+        users: PropTypes.array.isRequired
+      };
+  // let [isOpen, setIsOpen] = useState(true)
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showConfirmation, setShowConfirmation] = useState(false); 
+  const [userIdToBlock, setUserIdToBlock] = useState(null); 
+  const [userIdToUnblock, setUserIdToUnblock] = useState(null); 
+  const [currentPage, setCurrentPage] = useState(0);
 
 
-    const UsersTable = () => {
-    const [blockUser] = useBlockUserMutation()
-    const [unBlockUser] = useUnBlockUserMutation()
+  const handleSearch = (event) => {
+    setSearchQuery(event.target.value);
+  };
 
-    const [activeTab, setActiveTab] = useState(0);
+  const filteredUsers = users.filter(
+    (user) =>
+      user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.mobile.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+ 
+  
+    const [blockUserByAdmin,{ isLoading: isBlocking }] = useBlockUserByAdminMutation()
+    const [unblockUserByAdmin,{ isLoading: isUnblocking }] = useUnblockUserByAdminMutation()
 
-    const handleTabClick = (index) => {
-        setActiveTab(index);
-    }
+    // const [activeTab, setActiveTab] = useState(0);
 
-    const tabItems = [
-        "All Users",
-        "Blocked Users",
-    ]
+    // const handleTabClick = (index) => {
+    //     setActiveTab(index);
+    // }
 
-    const {data,isLoading,refetch,isError} = useGetUsersQuery()
+    // const tabItems = [
+    //     "All Users",
+    //     "Blocked Users",
+    // ]
 
-    const handleBlock = async(id) =>{
-        const res = await blockUser({id:id})
-        refetch()
-    }
+    // const {data,isLoading,refetch,isError} = useGetUsersQuery()
 
-    const handleUnblock = async(id) =>{
-        try {
-        const res = await unBlockUser({ id: id })
-        console.log("Unblock response:", res);
-        refetch()
-      } catch(error){
-        console.error("Error unblocking user:", error);
+    const itemsPerPage = 5;
+  const pageCount = Math.ceil(filteredUsers.length / itemsPerPage);
+
+  const paginatedUsers = filteredUsers.slice(
+    currentPage * itemsPerPage,
+    (currentPage + 1) * itemsPerPage
+  );
+
+  const handlePageClick = ({ selected }) => {
+    setCurrentPage(selected);
+  };
+
+    const handleBlock = async () => {
+      try {      
+        await blockUserByAdmin({ userId: userIdToBlock });
+        toast.success("User Blocked Successfully.");
+        setUserIdToBlock(null);
+        setShowConfirmation(false); 
+        setUsersData(prevUsers => {
+          return prevUsers.map(user =>
+            user._id === userIdToBlock ? { ...user, isBlocked: true } : user
+          );
+        });
+      } catch (err) {
+        toast.error(err?.data?.message || err?.error);
       }
-    }
-      const [currentPage, setCurrentPage] = useState(1);
-      const handlePageClick = (pageNumber) => {
-        setCurrentPage(pageNumber);
+    };
+
+    const handleUnblock = async () => {
+      try {      
+        await unblockUserByAdmin({ userId: userIdToUnblock });
+        toast.success("User Un Blocked Successfully.");
+        setUserIdToUnblock(null); 
+        setShowConfirmation(false); 
+  
+        setUsersData(prevUsers => {
+          return prevUsers.map(user =>
+            user._id === userIdToUnblock ? { ...user, isBlocked: false } : user
+          );
+        });
+      } catch (err) {
+        toast.error(err?.data?.message || err?.error);
       }
+    };
+      // const [currentPage, setCurrentPage] = useState(1);
+      // const handlePageClick = (pageNumber) => {
+      //   setCurrentPage(pageNumber);
+      // }
 
-      const itemsPerPage = 5;
-      const startIndex = (currentPage -1) * itemsPerPage;
-      const endIndex = startIndex + itemsPerPage
+      // const itemsPerPage = 5;
+      // const startIndex = (currentPage -1) * itemsPerPage;
+      // const endIndex = startIndex + itemsPerPage
 
-      if(isLoading){
-        return(
-            <h1>Loading...</h1>
-        )
-      }
+      // if(isLoading){
+      //   return(
+      //       <h1>Loading...</h1>
+      //   )
+      // }
 
-      let length = data.length 
+      // let length = data.length 
 
-      if(activeTab===1){
-        length = data.filter((item)=> item.isBlocked===true).length 
-      }
+      // if(activeTab===1){
+      //   length = data.filter((item)=> item.isBlocked===true).length 
+      // }
       return (
 
  <>
-  <div className="tabs border-b-2 border-blue-500">
-    <div className="flex gap-x-4 gap-y-2 justify-between">
-      {tabItems.map((item, index) => (
-        <div className="flex-shrink-0" key={index}>
-          <button
-            className={`text-lg lg:text-base text-gray-700 font-semibold pb-2 lg:pb-0 focus:outline-none ${activeTab === index ? "border-b-2 border-blue-500" : ""}`}
-            onClick={() => handleTabClick(index)}
-          >
-            {item}
+ <div className='pl-80'>
+    <form className='bg-slate-200   rounded-lg pr-4   flex items-center'>
+        
+          <input
+            type='text'
+            placeholder="Enter Name,Email or Mobile.."
+            className='bg-transparent focus:outline-none w-1 sm:w-36 h-6 pl-2   placeholder:text-black border-none focus:border-none focus:ring-0'
+            value={searchQuery}
+            onChange={handleSearch}
+         />
+          <button className="pl-96">
+            <FaSearch className='text-black ' />
           </button>
+        </form>
         </div>
-      ))}
+ 
+
+
+<div className="pt-6">
+ <div className="overflow-x-auto">
+  <table className="mt-3 mb-3 w-full border-collapse">
+  <thead>
+    <tr className="bg-gray-200">
+      <th className="py-2 px-4 border">SI No.</th>
+      <th className="py-2 px-4 border">Name</th>
+      <th className="py-2 px-4 border">Email</th>
+      <th className="py-2 px-4 border">Phone</th>
+      <th className="py-2 px-4 border">Status</th>
+      <th className="py-2 px-4 border">Manage</th>
+    </tr>
+  </thead>
+  <tbody>
+    {filteredUsers.map((user, index) => (
+      <tr key={index} className="border">
+        <td className="py-2 px-4 border">{index + 1}</td>
+        <td className="py-2 px-4 border">{user.username}</td>
+        <td className="py-2 px-4 border">{user.email}</td>
+        <td className="py-2 px-4 border">{user.mobile}</td>
+        <td className="py-2 px-4 border">
+          {user.isBlocked === false ? (
+            <span className="text-green-500 font-bold">Active</span>
+          ) : (
+            <span className="text-red-500 font-bold">Blocked</span>
+          )}
+        </td>
+        <td className="py-2 px-4 border">
+          {user.isBlocked === false ? (
+            <button
+              type="button"
+              className="bg-red-500 text-white py-1 px-2 rounded"
+              onClick={() => {
+                setUserIdToBlock(user._id);
+                setShowConfirmation(true);
+              }}
+            >
+              Block
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="bg-green-500 text-white py-1 px-2 rounded"
+              onClick={() => {
+                setUserIdToUnblock(user._id);
+                setShowConfirmation(true);
+              }}
+            >
+              Unblock
+            </button>
+          )}
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+<Dialog onClose={() => setIsOpen(false)}  open={showConfirmation} onHide={() => setShowConfirmation(false)} className="modal">
+<Dialog.Panel>
+ 
+<Dialog.Title>Confirmation</Dialog.Title>
+      
+      <button type="button" className="close" onClick={() => setShowConfirmation(false)}>
+        <span aria-hidden="true">&times;</span>
+      </button>
+    
+    <div className="modal-body">
+      {userIdToBlock ? (
+        <>
+          <p className="mb-4">Are you sure you want to actually block this user?</p>
+          <button
+            type="button"
+            className="btn btn-secondary mr-2"
+            onClick={() => setShowConfirmation(false)}
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            className="btn btn-danger"
+            onClick={handleBlock}
+            disabled={isBlocking}
+          >
+            {isBlocking ? "Blocking..." : "Block"}
+          </button>
+        </>
+      ) : userIdToUnblock ? (
+        <>
+          <p className="mb-4">Are you sure you want to unblock this user?</p>
+          <button
+            type="button"
+            className="btn btn-secondary mr-2"
+            onClick={() => setShowConfirmation(false)}
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            className="btn btn-success"
+            onClick={handleUnblock}
+            disabled={isUnblocking}
+          >
+            {isUnblocking ? "Unblocking..." : "Unblock"}
+          </button>
+        </>
+      ) : null}
     </div>
+  
 
-    <div className="pt-6">
-      <div className="overflow-x-auto">
-        <table className="table-auto w-full">
-          <thead className="bg-gray-200">
-            <tr>
-              <th className="px-4 py-2">Name</th>
-              <th className="px-4 py-2">Email</th>
-              <th className="px-4 py-2">Mobile</th>
-              <th className="px-4 py-2">Status</th>
-              <th className="px-4 py-2">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {activeTab === 0 && data.slice(startIndex, endIndex).map((item, index) => (
-              <tr key={index}>
-                <td className="px-4 py-2">{item.username}</td>
-                <td className="px-4 py-2">{item.email}</td>
-                <td className="px-4 py-2">{item.mobile}</td>
-                <td className="px-4 py-2">{item.isBlocked ? 'Blocked' : 'Active'}</td>
-                <td className="px-4 py-2">
-                  {item.isBlocked === true? (
-                    <button className="rounded-full py-2 px-4 text-center text-sm font-semibold bg-blue-500 text-white" onClick={() => handleUnblock(item._id)}>
-                      UnBlock
-                    </button>
-                  ) : (
-                    <button className="rounded-full py-2 px-4 text-center text-sm font-semibold bg-blue-500 text-white" onClick={() => handleBlock(item._id)}>
-                      Block
-                    </button>
-                  )}
-                </td>
-              </tr>
-            ))}
+  </Dialog.Panel>
+</Dialog>
 
-            {activeTab === 1 && data.filter((item) => item.isBlocked === true).slice(startIndex, endIndex).map((item, index) => (
-              <tr key={index}>
-                <td className="px-4 py-2">{item.username}</td>
-                <td className="px-4 py-2">{item.email}</td>
-                <td className="px-4 py-2">{item.mobile}</td>
-                <td className="px-4 py-2">{item.isBlocked ? 'Blocked' : 'Active'}</td>
-                <td className="px-4 py-2">
-                  {item.isBlocked ? (
-                    <button className="rounded-full py-2 px-4 text-center text-sm font-semibold bg-blue-500 text-white" onClick={() => handleUnblock(item._id)}>
-                      UnBlock
-                    </button>
-                  ) : (
-                    <button className="rounded-full py-2 px-4 text-center text-sm font-semibold bg-blue-500 text-white" onClick={() => handleBlock(item._id)}>
-                      Block
-                    </button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
       </div>
+    <ReactPaginate
+  previousLabel={"previous"}
+  nextLabel={"next"}
+  breakLabel={"..."}
+  breakClassName={"break-me"}
+  pageCount={pageCount}
+  marginPagesDisplayed={2}
+  pageRangeDisplayed={5}
+  onPageChange={handlePageClick}
+  containerClassName={"pagination flex justify-center mt-4"}
+  previousLinkClassName={"bg-blue-500 text-white py-2 px-4 rounded-l"}
+  nextLinkClassName={"bg-blue-500 text-white py-2 px-4 rounded-r"}
+  pageClassName={"mx-2"}
+  activeClassName={"active"}
+/>
     </div>
-  </div>
-  <Pagination
-    currentPage={currentPage}
-    handlePageClick={handlePageClick}
-    totalPages={Math.ceil(length / itemsPerPage)}
-    setCurrentPage={setCurrentPage}
-  />
+
+
+  
+
 </>
 
       )

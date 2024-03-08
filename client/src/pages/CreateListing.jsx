@@ -25,17 +25,27 @@ export default function CreateListing() {
 
   })
  const [imageUploadError,setImageUploadError] = useState(false)
+ 
  const [uploading, setUploading] = useState(false)
  const [error, setError] = useState(false)
+ const [nameError, setNameError] = useState('');
+  const [descriptionError, setDescriptionError] = useState('');
+  const [addressError, setAddressError] = useState('');
  const [loading,setLoading] = useState(false)
   console.log(formData);
+ 
+  
+
+
   const handleImageSubmit = (e) =>{
     if(files.length > 0 && files.length + formData.imageUrls.length < 7 ){
       setUploading(true)
       setImageUploadError(false)
       const promises = [];
 
+
       for(let i=0; i < files.length; i++) {
+        console.log('File size before upload:', files[i].size);
         promises.push(storeImage(files[i]))
       }
       Promise.all(promises).then((urls) => {
@@ -58,6 +68,7 @@ export default function CreateListing() {
   };
 
   const storeImage = async (file) =>{
+    
     return new Promise((resolve,reject)=> {
       const storage = getStorage(app);
       const fileName = new Date(). getTime() + file.name;
@@ -70,6 +81,12 @@ export default function CreateListing() {
           console.log(`Upload is ${progress}% done`);
         },
         (error)=>{
+          if (error.code) {
+            console.error("Upload error code:", error.code);
+          }
+          if (error.message) {
+            console.error("Upload error message:", error.message);
+          }
           reject(error);
         },
         ()=>{
@@ -97,6 +114,14 @@ export default function CreateListing() {
       })
     }
 
+    if (e.target.id === 'name') {
+      setNameError('');
+    } else if (e.target.id === 'description') {
+      setDescriptionError('');
+    } else if (e.target.id === 'address') {
+      setAddressError('');
+    }
+
     if(e.target.id === 'parking' || e.target.id === 'furnished' || e.target.id === 'offer'){
       setFormData({
         ...formData,
@@ -114,9 +139,31 @@ export default function CreateListing() {
 
   const handleSubmit = async(e) => {
     e.preventDefault();
+   
+
     try {
+      setNameError('');
+    setDescriptionError('');
+    setAddressError('');
+
+      if (!formData.name) {
+        setNameError('Name cannot be empty');
+      }
+
+      if (!formData.description) {
+        setDescriptionError('Description cannot be empty');
+      }
+
+      if (!formData.address) {
+        setAddressError('Address cannot be empty');
+      }
+
       if(formData.imageUrls.length < 1) return setError('You must upload atleast one image')
       if(+formData.regularPrice < +formData.discountPrice) return setError('Discount price must be lower than regular price')
+      
+      if (nameError || descriptionError || addressError) {
+      return; // Stop form submission if there are errors
+    }
       setLoading(true);
       setError(false);
       const res = await fetch('/api/listing/create', {
@@ -142,6 +189,7 @@ export default function CreateListing() {
     }
   }
 
+  
   return (
 
 //  firebase storageee
@@ -152,15 +200,21 @@ export default function CreateListing() {
 
 
 
-    <div className="h-screen overflow bg-cover bg-center bg-opacity-50 " style={{ backgroundImage: "url('/bg1.jpg')" }}>
+    <div className="h-screen overflow bg-cover bg-center bg-opacity-50 " >
     <Header />
-    <main className='p-3 max-w-4xl mx-auto'>
-      <h1 className='text-3xl font-semibold text-center my-7'>Create a Listing</h1>
+    
+    <main className='my-4 max-w-screen-lg border px-4 pt-20 shadow-xl sm:rounded-xl sm:px-4 sm:py-1 md:mx-auto w-full ' style={{ backgroundImage: "url('/bgsignup17.jpg')" }} >
+      <h1 className='text-3xl font-semibold text-center my-7' >Create a Listing</h1>
       <form onSubmit={handleSubmit} className='flex flex-col sm:flex-row gap-4'>
+      
         <div className='flex flex-col gap-4 flex-1'>
-          <input onChange={handleChange} value={formData.name} type='text' placeholder='Name' className='border p-3 rounded-lg border-cyan-600 bg-cyan-950 bg-opacity-65 placeholder:text-white' id='name' maxLength='50' minLength='4' required/>
-          <textarea onChange={handleChange} value={formData.description} type="text" placeholder='Description' className='border p-3 rounded-lg border-cyan-600 bg-cyan-950 bg-opacity-65 placeholder:text-white' id='description' required/>
-          <input onChange={handleChange} value={formData.address} type='text' placeholder='Address' className='border p-3 rounded-lg border-cyan-600 bg-cyan-950 bg-opacity-65 placeholder:text-white' id='address' required/>
+          <input onChange={handleChange} value={formData.name} type='text' placeholder='Name of the House & Place' className='border p-3 rounded-lg border-cyan-600 bg-cyan-950 bg-opacity-65 placeholder:text-white' id='name'  />
+          <p className='text-red-700 text-sm'>{nameError && nameError}</p>
+          <textarea onChange={handleChange} value={formData.description} type="text" placeholder='Description' className='border p-3 rounded-lg border-cyan-600 bg-cyan-950 bg-opacity-65 placeholder:text-white' id='description' />
+          <p className='text-red-700 text-sm'>{descriptionError && descriptionError}</p>
+          <input onChange={handleChange} value={formData.address} type='text' placeholder='Address' className='border p-3 rounded-lg border-cyan-600 bg-cyan-950 bg-opacity-65 placeholder:text-white' id='address' />
+          <p className='text-red-700 text-sm'>{addressError && addressError}</p>
+
         <div className='flex gap-3 flex-wrap'>
           <div className='flex gap-2 items-center '>
             <input onChange={handleChange} checked = {formData.type === 'sale'} type='checkbox' id='sale' className='w-5 border-cyan-600 bg-cyan-950 bg-opacity-65 ' />
@@ -246,9 +300,15 @@ export default function CreateListing() {
             {loading ? 'Creating....' : 'Create listing'}
             </button>
             {error && <p className='text-red-700 text-sm'>{error}</p>}
+
+            
+            
+            
+
         </div>       
       </form>
     </main>
+    
     </div>
   )
 }

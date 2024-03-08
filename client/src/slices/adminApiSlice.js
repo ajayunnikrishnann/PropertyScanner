@@ -10,23 +10,41 @@ export const adminSlice = userApiSlice.injectEndpoints({
           body: data,
         }),
       }),
-
-      blockUser: builder.mutation({
-        query: (params) => ({
-          url: `${BLOCK_USERS}?id=${params.id}`,
-          method: 'GET',
-          
+      blockUserByAdmin: builder.mutation({
+            
+        query: (data) => ({
+            url: BLOCK_USERS,
+            method: 'POST',
+            body: data
         }),
-      }),
-      unBlockUser: builder.mutation({
-        query: (params) => ({
-          url: `${UNBLOCK_USERS}?id=${params.id}`,
-          method: 'GET',
-          
-        }),
-      }),
 
-      getUsers:builder.query({
+    }),
+    unblockUserByAdmin: builder.mutation({
+        
+        query: (data) => ({
+            url: UNBLOCK_USERS,
+            method: 'POST',
+            body: data
+        }),
+
+    }),
+
+      // blockUser: builder.mutation({
+      //   query: (params) => ({
+      //     url: `${BLOCK_USERS}?id=${params.id}`,
+      //     method: 'GET',
+          
+      //   }),
+      // }),
+      // unBlockUser: builder.mutation({
+      //   query: (params) => ({
+      //     url: `${UNBLOCK_USERS}?id=${params.id}`,
+      //     method: 'GET',
+          
+      //   }),
+      // }),
+
+      getUsers:builder.mutation({
         query:()=>({
            url:`${GET_USERS}` ,
            method:'GET'
@@ -46,10 +64,11 @@ export const adminSlice = userApiSlice.injectEndpoints({
 })
 
 
+
 export const {
     useAdminloginMutation,
     useAdminLogoutMutation,
-    useBlockUserMutation,
-    useUnBlockUserMutation,
-    useGetUsersQuery,
+    useBlockUserByAdminMutation,
+    useUnblockUserByAdminMutation,
+    useGetUsersMutation
 }= adminSlice

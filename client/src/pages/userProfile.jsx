@@ -8,7 +8,9 @@ import LoaderComponent from '../components/loader';
 import { useUpdateProfileMutation, useUsergetProfileMutation } from '../slices/usersApiSlice'; 
 import Header from '../components/Header';
 import { Link } from 'react-router-dom';
-
+import PayButton from '../components/PayButton';
+import ReactPaginate from 'react-paginate';
+// import { token } from '../config/api';
 
 export default function UserProfile() {
 
@@ -23,8 +25,22 @@ export default function UserProfile() {
   const [getProfile] = useUsergetProfileMutation();
   const [showListingsError, setShowListingsError] = useState(false)
   const [userListings, setUserListings] = useState([])
+  
   const isValidName = (name) => /^[a-zA-Z\s]*$/.test(name);
   const isValidMobile = (mobile) => /^[0-9]{0,10}$/.test(mobile);
+
+   const [currentPage, setCurrentPage] = useState(0);
+  const listingsPerPage = 5;
+
+  const handlePageChange = (selected) => {
+    setCurrentPage(selected.selected);
+  };
+
+  const displayedListings = userListings.slice(
+    currentPage * listingsPerPage,
+    (currentPage + 1) * listingsPerPage
+  );
+
 
 
   const handleImage = (e) => {
@@ -120,6 +136,10 @@ export default function UserProfile() {
 const handleShowListings = async () => {
   try {
     setShowListingsError(false)
+    if (userListings.length > 0) {
+      setUserListings([]);
+      return;
+    }
     const res = await fetch(`/api/users/listings/${userInfo._id}`)
     const data = await res.json();
     if (data.success === false) {
@@ -127,6 +147,7 @@ const handleShowListings = async () => {
       return;
     }
     setUserListings(data);
+    
   } catch (error) {
     setShowListingsError(true)
   }
@@ -135,7 +156,8 @@ const handleShowListings = async () => {
 const handleListingDelete = async (listingId) => {
   try {
     const res= await fetch(`/api/listing/delete/${listingId}`, {
-      method:'DELETE'
+      method:'DELETE',
+     
     })
     const data = await res.json();
     if (data.success === false){
@@ -151,11 +173,16 @@ const handleListingDelete = async (listingId) => {
   }
 }
 
+
+
+
+
+
   return (
-    <div  className="h-screen overflow bg-cover bg-center bg-opacity-50 " style={{ backgroundImage: "url('/bg1.jpg')" }}>
+    <div  className="h-screen overflow bg-cover bg-center bg-opacity-50 " >
      <Header />
     <div className="flex items-center justify-center ">
-    <div className="my-4 max-w-screen-md border px-4 shadow-xl sm:rounded-xl sm:px-4 sm:py-1 md:mx-auto w-full bg-black bg-opacity-30">
+    <div className="my-4 max-w-screen-md border px-4 shadow-xl sm:rounded-xl sm:px-4 sm:py-1 md:mx-auto w-full " style={{ backgroundImage: "url('/bgsignup17.jpg')" }}>
       <p className="font-medium text-3xl mb-10 text-center">Profile Details</p>
   
       <div className="flex flex-col items-center gap-4 w-full">
@@ -237,7 +264,7 @@ const handleListingDelete = async (listingId) => {
       userListings.length > 0 && 
       <div className='flex flex-col gap-4'>
         <h1 className='text-center mt-7 text-2xl font-semibold'>Your Listings</h1>
-       {userListings.map((listing)=> (
+       {displayedListings.map((listing)=> (
         <div key= {listing._id} className='border rounded-lg p-3 flex justify-between items-center gap-4'>
           <Link to={`/listing/${listing._id}`}>
             <img 
@@ -249,7 +276,16 @@ const handleListingDelete = async (listingId) => {
           <Link className=' text-slate-700 font-semibold  hover:underline truncate flex-1' to={`/listing/${listing._id}`}>
           <p>{listing.name}</p>
           </Link>
+          <div className=''>
+          <PayButton  listing={listing} />
+          </div>
           <div className='flex flex-col items-center'>
+          {/* <button
+              disabled={listing.isBoosted}  // Disable if already boosted
+               className={`text-${listing.isBoosted ? 'gray' : 'red'}-700 uppercase font-medium`}
+           >
+              {listing.isBoosted ? "Boosted Propertyy" : "Boost Property"}
+           </button> */}
             <button onClick={()=>handleListingDelete(listing._id)} className='text-red-700 uppercase font-medium'>Delete</button>
             <Link to={`/updateListing/${listing._id}`}>
             <button className='text-green-700 uppercase font-medium'>Edit</button>
@@ -258,6 +294,20 @@ const handleListingDelete = async (listingId) => {
         </div>
         
         ))}
+        <ReactPaginate
+                previousLabel={'previous'}
+                nextLabel={'next'}
+                breakLabel={'...'}
+                pageCount={Math.ceil(userListings.length / listingsPerPage)}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={5}
+                onPageChange={handlePageChange}
+                containerClassName={'pagination flex justify-center mt-4 mb-4'}
+                previousLinkClassName={'bg-blue-500 text-white py-2 px-4 rounded-l '}
+                nextLinkClassName={'bg-blue-500 text-white py-2 px-4 rounded-r'}
+                pageClassName={'mx-2'}
+                activeClassName={'active'}
+              />
       </div>
       }
       </div>

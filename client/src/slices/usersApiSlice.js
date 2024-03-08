@@ -20,13 +20,20 @@ export const userSlice = userApiSlice.injectEndpoints({
                 body: data,
             }),
         }),
-        verifyregistration:builder.mutation({
-            query: (data)=>({
-                url: `${USERS_URL}/verifyRegistration`,
-                method: 'POST',
-                body: data,
-            }),
+        otpVerify: builder.mutation({
+          query: (data) => ({
+              url: `${USERS_URL}/otpVerify`,
+              method: 'POST',
+              body: data
+          }),
+      }),
+      resendOtp: builder.mutation({
+        query: (data) => ({
+            url: `${USERS_URL}/resendOtp`,
+            method: 'POST',
+            body: data
         }),
+    }),
         googleLogin: builder.mutation({
             query:(data) =>({
                 url: `${USERS_URL}/googleLogin`,
@@ -85,15 +92,60 @@ export const userSlice = userApiSlice.injectEndpoints({
           query:() => ({
             url:`${USERS_URL}/getUserBanner`,
             method: 'GET'
+          }),
+        }),
+        accessChat: builder.mutation({
+          query: (userId) => ({
+              url: `${USERS_URL}/accessChat`,
+              method: 'POST',
+              body: {userId}
           })
+      }),
+      fetchChat: builder.mutation({
+          query: () => ({
+              url: `${USERS_URL}/fetchChats`,
+              method: 'POST'
+          })
+      }), 
+      sendMessage: builder.mutation({
+          query: (data) => ({
+              url: `${USERS_URL}/sendMessage`,
+              method: 'POST',
+              body: data
+          })
+      }),
+      fetchMessages: builder.mutation({
+          query: (chatId) => ({
+              url: `${USERS_URL}/allMessages/${chatId}`,
+              method: 'GET'
+          })
+      }),
+        checkBlock: builder.mutation({
+          query: (data) => ({
+              url: `${USERS_URL}/checkBlock`,
+              method: 'PUT',
+              body: data
+          })
+      }),
+      fetchNotifications: builder.mutation({
+        query: () => ({
+            url: `${USERS_URL}/allNotifications`,
+            method: 'POST'
         })
+    }),
+    deleteNotification: builder.mutation({
+        query: (notificationId) => ({
+            url: `${USERS_URL}/deleteNotification/${notificationId}`,
+            method: 'DELETE'
+        })
+    }),
+ 
     })
 })
 
 export const{
     useLoginMutation,
     useRegisterMutation,
-    useVerifyregistrationMutation,
     useGoogleLoginMutation,
     useLogoutMutation,
     useForgotPasswordMutation,
@@ -102,5 +154,15 @@ export const{
     useUpdateProfileMutation,
     useUsergetProfileMutation,
     useGetUserDataMutation,
-    useGetUserBannerQuery
+    useGetUserBannerQuery,
+    useOtpVerifyMutation,
+    useResendOtpMutation,
+    useCheckBlockMutation,
+    useAccessChatMutation,
+    useFetchChatMutation,
+    useSendMessageMutation,
+    useFetchMessagesMutation,
+    useFetchNotificationsMutation,
+    useDeleteNotificationMutation,
+
 } = userSlice

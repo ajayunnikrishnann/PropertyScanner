@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom"
 import {MdLocationOn} from 'react-icons/md'
+import { FaCheck } from 'react-icons/fa';
 function ListingItem({listing}) {
   return (
     <div className=" bg-slate-100 shadow-md hover:shadow-lg transition-shadow overflow-hidden rounded-lg w-full sm:w-[300px]">
@@ -7,7 +8,10 @@ function ListingItem({listing}) {
         <img src={listing.imageUrls[0] || 'https://53.fs1.hubspotusercontent-na1.net/hub/53/hubfs/Sales_Blog/real-estate-business-compressor.jpg?width=595&height=400&name=real-estate-business-compressor.jpg'} 
         alt="listing cover" className="h-[320px] sm:h-[220px] w-full object-cover hover:scale-105 transition-scale duration-300"/>
         <div className="p-3 flex flex-col gap-2">
+        <div className="flex items-center text-green-500 mb-2">
+            {listing.isBoosted && <FaCheck className="mr-1" />}
             <p className="truncate text-lg font-semibold text-slate-700">{listing.name}</p>
+            </div>
             <div className="flex items-center gap-2">
                 <MdLocationOn className="h-4 w-4 text-green-500"/>
                 <p className="text-sm text-gray-600 truncate w-full">{listing.address}</p>
@@ -28,6 +32,7 @@ function ListingItem({listing}) {
                     baths` : `${listing.bathrooms} bed`}
                 </div>
             </div>
+          
         </div>
      </Link>
     </div>

@@ -15,6 +15,9 @@ import {
      FaChair
  } from 'react-icons/fa';
 import Contact from '../components/Contact';
+import ChatButton from '../components/ChatButton';
+import Loading from '../components/Loading';
+
 export default  function Listing() {
     SwiperCore.use([Navigation]);
     const [listing,setListing] = useState(null);
@@ -23,17 +26,33 @@ export default  function Listing() {
     const [copied, setCopied] = useState(false);
     const [contact,setContact] = useState(false)
 
-    const params= useParams();
-    const  {userInfo}  = useSelector((state) => state.auth)
+   
 
+    const  {userInfo}  = useSelector((state) => state.auth)
+    const params= useParams();
 
 
     useEffect(()=>{
+      console.log('Params:', params);
         const fetchListing = async () => {
             try {
                 setLoading(true)
-                const res = await fetch(`/api/listing/get/${params.listingId}`)
 
+                if (!params.listingId || params.listingId === 'undefined') {
+                  console.error('Listing ID is missing or undefined');
+                  setError(true);
+                  setLoading(false);
+                  return;
+
+              }
+                console.log('Listing ID:', params.listingId);
+
+                const res = await fetch(`/api/listing/get/${params.listingId}`)
+                if (!res.ok) {
+                  setError(true);
+                  setLoading(false);
+                  return;
+                }
                 const data = await res.json();
                 if(data.success === false){
                     setError(true)
@@ -44,6 +63,7 @@ export default  function Listing() {
                 setLoading(false);
                 setError(false)
             } catch (error) {
+              console.error('Error fetching listing:', error);
                 setError(true)
                 setLoading(false);
             }
@@ -59,7 +79,7 @@ export default  function Listing() {
         <Header />
     <main>
     
-        {loading && <p className='text-center my-7 text-2xl'>Loading...</p>}
+        {loading && <p className='text-center my-7 text-2xl'><Loading /></p>}
         {error && <p className='text-center my-7 text-2xl'>Something went wrong</p>}
 
         
@@ -152,8 +172,13 @@ export default  function Listing() {
                 </li>
             </ul>
             {userInfo && listing.userRef !== userInfo._id && !contact && (
-            <button onClick={()=>setContact(true)} className='bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3'>Send mail to landloard</button>
-              )}
+        <>
+        
+    <ChatButton userId={listing.userRef} />
+    <button onClick={() => setContact(true)} className='bg-gradient-to-b  from-slate-500 via-slate-700 to-slate-900 text-white rounded-lg uppercase hover:opacity-95 p-3'>Send mail to landlord</button>
+  </>
+)}
+              
               {contact && <Contact listing={listing} />}
             </div>        
         </div>
