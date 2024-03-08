@@ -1,7 +1,7 @@
 
 
 import {React,useState,useEffect} from 'react'
-import RightArrow from '../../assets/RightArrow.svg'
+import RightArrow from '../../assets/rightArrow.svg'
 import {motion} from 'framer-motion'
 import {Link } from 'react-router-dom'
 import { logout } from '../../slices/adminAuthSlice'
