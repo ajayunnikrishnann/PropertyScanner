@@ -30,6 +30,9 @@ app.use(cors());
 //     res.send('Token verification successful');
 // });
 
+const currentWorkingDir = path.resolve();
+const parentDir = path.dirname(currentWorkingDir)
+
 app.use(express.json({ limit: "30mb", extended: true }));
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
 app.use(express.static('api/Public'));
@@ -41,11 +44,13 @@ app.use("/api/stripe",stripe );
 
 
 if (process.env.NODE_ENV === 'production') {
-    const __dirname = path.resolve();
+    const __dirname = path.resolve()
     // const clientDistPath = path.join(__dirname, '/client/dist');
     // app.use(express.static(clientDistPath));
-    app.use(express.static(path.join(__dirname, '/client/dist')));
-    app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html')));
+    app.use(express.static(path.join(parentDir, "/client/dist")));
+    app.get("*", (req, res) =>
+    res.sendFile(path.resolve(parentDir, "client", "dist", "index.html"))
+  );
 } else {
     app.get('/', (req, res) => res.send('Server is ready'));
 }
