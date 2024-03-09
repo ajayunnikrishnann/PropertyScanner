@@ -14,30 +14,25 @@ import { storeNotification } from './controllers/notificationController.js';
 import connectDB from './config/db.js'
 import dotenv from 'dotenv'
 
-
-
 dotenv.config()
-
 
 const port = process.env.PORT || 4000;
 console.log("port:",port);
 
-
-
-
-
 const app = express();
+connectDB();
 
 app.use(cookieParser());
 app.use(cors());
 
 
-app.get('/test-verify-token', verifyToken, (req, res) => {
-    res.send('Token verification successful');
-});
-app.use(express.static('api/Public'));
+// app.get('/test-verify-token', verifyToken, (req, res) => {
+//     res.send('Token verification successful');
+// });
+
 app.use(express.json({ limit: "30mb", extended: true }));
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
+app.use(express.static('api/Public'));
 
 app.use('/api/users',userRouter);
 app.use('/api/admin',adminRouter);
@@ -48,24 +43,23 @@ app.use("/api/stripe",stripe );
 if (process.env.NODE_ENV === 'production') {
     const __dirname = path.resolve();
     // const clientDistPath = path.join(__dirname, '/client/dist');
-    const clientDistPath = path.join(__dirname, 'client', 'dist');
-
-    app.use(express.static(clientDistPath));
-
-    app.get('*', (req, res) => res.sendFile(path.resolve(clientDistPath, 'index.html')));
+    // app.use(express.static(clientDistPath));
+    app.use(express.static(path.join(__dirname, '/client/dist')));
+    app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html')));
 } else {
     app.get('/', (req, res) => res.send('Server is ready'));
 }
 
+app.use(notFound);
+app.use(errorHandler);
 
 const server = app.listen(port,()=>{
     console.log(`server started on port ${port}`);
 })
-connectDB();
 
 
-app.use(notFound);
-app.use(errorHandler);
+
+
 
 
 import ("socket.io").then ((socketIo) => {
