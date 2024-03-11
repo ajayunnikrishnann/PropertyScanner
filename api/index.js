@@ -71,7 +71,7 @@ import ("socket.io").then ((socketIo) => {
     const io = new socketIo.Server(server, {
         pingTimeout: 60000,
         cors: {
-            origin: "http://localhost:5173",
+            origin: "https://www.propertyscanner.ajayunnikrishnan.live",
         }
     })
 

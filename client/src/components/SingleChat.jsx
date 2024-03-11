@@ -13,7 +13,7 @@ import Lottie from 'react-lottie'
 import animationData from '../animations/typing.json'
 import moment from 'moment'
 
-const ENDPOINT = "http://localhost:3000";
+const ENDPOINT = "https://www.propertyscanner.ajayunnikrishnan.live";
 let socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
