@@ -259,7 +259,7 @@ const Register = () => {
           value={username}
           onChange={(e) => setUserName(e.target.value)}
           onBlur={validateUsername}
-          className='border-2 border-cyan-800 p-3  rounded-lg bg-transparent placeholder:text-cyan-950 w-full text-white'
+          className='border-2 border-cyan-800 p-3  rounded-lg bg-transparent placeholder:text-cyan-950 w-full text-black'
         />
         {usernameError && <p className='text-red-700 text-sm font-semibold'>{usernameError}</p>}
         <input
@@ -269,7 +269,7 @@ const Register = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           onBlur={validateEmail}
-          className='border-2 border-cyan-800 p-3 rounded-lg bg-transparent placeholder:text-cyan-950 w-full text-white'
+          className='border-2 border-cyan-800 p-3 rounded-lg bg-transparent placeholder:text-cyan-950 w-full text-black'
           />
            {emailError && <p className='text-red-700 text-sm font-semibold'>{emailError}</p>}
         <input
@@ -279,7 +279,7 @@ const Register = () => {
           value={mobile}
           onChange={(e) => setMobile(e.target.value)}
           onBlur={validateMobile}
-          className='border-2 border-cyan-800 p-3 rounded-lg bg-transparent placeholder:text-cyan-950 w-full text-white'
+          className='border-2 border-cyan-800 p-3 rounded-lg bg-transparent placeholder:text-cyan-950 w-full text-black'
         />
          {mobileError && <p className='text-red-700 text-sm font-semibold'>{mobileError}</p>}
         <input
@@ -289,7 +289,7 @@ const Register = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           onBlur={validatePassword}
-          className='border-2 border-cyan-800 p-3 rounded-lg bg-transparent placeholder:text-cyan-950 w-full text-white '
+          className='border-2 border-cyan-800 p-3 rounded-lg bg-transparent placeholder:text-cyan-950 w-full text-black '
         />
          {passwordError && <p className='text-red-700 text-sm font-semibold'>{passwordError}</p>}
         <input
@@ -299,7 +299,7 @@ const Register = () => {
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           onBlur={validatePassword}
-          className='border-2 border-cyan-800 p-3 rounded-lg bg-transparent placeholder:text-cyan-950 w-full text-white'
+          className='border-2 border-cyan-800 p-3 rounded-lg bg-transparent placeholder:text-cyan-950 w-full text-black'
         />
         {confirmPasswordError && <p className='text-red-700 text-sm font-semibold'>{confirmPasswordError}</p>}
         <button

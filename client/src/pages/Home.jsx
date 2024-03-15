@@ -70,13 +70,13 @@ const Home = () => {
 
   return (
 <div>
-    <div className="min-h-screen flex flex-col items-stretch">
+    <div className="min-h-screen flex flex-col items-stretch w-full">
     <Header /> 
     
     <div className="absolute inset-0 ">
       
       <div>     
-      <img src={banners.image} alt="Banner" className="w-full h-full object-cover" />
+      <img src={banners.image} alt="Banner" className="w-full h-full object-cover max-w-full" />
      
       <div >
         <div className="flex flex-col gap-4 top-0 p-16  lg:py-28 px-3  lg:max-w-6xl mx-auto absolute lg:top-2">

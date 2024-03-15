@@ -142,7 +142,7 @@ const sendOtpVerification = asyncHandler(async ({_id, email}, res) => {
         const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
         console.log(otp);
         const mailOptions = {
-            from: process.env.EMAIL,
+            from: process.env.GMAIL_USER,
             to: email,
             subject: "Verify Your Email",
             html: `<p>Your OTP is <b>${otp}</b></p><p>This code <b>expires in one minute</b></p>`
