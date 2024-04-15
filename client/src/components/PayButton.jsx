@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useSelector } from 'react-redux'
 import { useState,useEffect } from "react";
-export const url = "http://localhost:3000/api";
+export const url = "https://www.propertyscanner.ajayunnikrishnan.live/api";
 
 const PayButton = ({listing}) => {
     const { userInfo } = useSelector((state) => state.auth);

@@ -104,7 +104,6 @@ import ("socket.io").then ((socketIo) => {
             console.log("newmessagee:",newMessageReceived);
             let chat = newMessageReceived.chat;
             
-            
             if (!chat.users) return console.log("chat.users not defined");
 
             
